@@ -28,10 +28,15 @@ void ProgramHandler::run()
     BeginDrawing();
     ClearBackground(RAYWHITE);
     BeginMode3D(_cc.getCamera());
+
     _r.display(_ss);
+    
     DrawGrid(250, 2);
+    
     EndMode3D();
+    
     _gh.display(_ss);
+  
     EndDrawing();
   }
 }

@@ -33,6 +33,6 @@ struct SharedState
 
   // Physics setpoint forces
   btVector3 player_force_input{0.f, 0.f,0.f}; 
-  btVector3 player_torque_input{0.f, 0.f,0.f};;
+  btVector3 player_torque_input{0.f, 0.f,0.f};
 
 };

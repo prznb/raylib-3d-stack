@@ -2,7 +2,8 @@
 
 namespace physics {
 
-Transform Bridge::computeObjectTransformForRenderer(btCollisionObject *obj) {
+Transform Bridge::computeObjectTransformForRenderer(btCollisionObject *obj) 
+{
   Transform rendererside_transform;
 
   btRigidBody *body = btRigidBody::upcast(obj);

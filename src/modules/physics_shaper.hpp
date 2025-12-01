@@ -1,8 +1,6 @@
 #pragma once
 #include "LinearMath/btVector3.h"
-#include "btBulletDynamicsCommon.h"
 #include "raylib.h"
-#include "raymath.h"
 #include "shared_state.hpp"
 
 /** @brief Apply forces and torquest to the object
