@@ -71,6 +71,7 @@ setup: include lib copy_assets
 # Pull and update the the build submodules (+ bullet)
 submodules:
 	git submodule update --init --recursive --depth 1
+	sudo apt install libbullet-dev 
 
 
 # Copy the relevant header files into includes
@@ -99,8 +100,8 @@ $(buildDir)/%.o: src/%.cpp Makefile
 	$(CXX) -MMD -MP -c $(compileFlags) $< -o $@ $(CXXFLAGS)
 
 copy_assets:
-	mkdir -p $(buildDir)/$(assetsDir)
-	cp -r $(assetsDir)/* $(buildDir)/$(assetsDir)
+# mkdir -p $(buildDir)/$(assetsDir)
+# cp -r $(assetsDir)/* $(buildDir)/$(assetsDir)
 
 # Run the executable
 execute:
