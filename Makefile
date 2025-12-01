@@ -9,15 +9,20 @@
 rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 platformpth = $(subst /,$(PATHSEP),$1)
 
+# Add Bullet Physics via pkg-config 
+bullet_cflags := $(shell pkg-config --cflags bullet 2>/dev/null)
+bullet_libs   := $(shell pkg-config --libs bullet 2>/dev/null)
+
 # Set global macros
 buildDir := bin
+assetsDir := assets
 executable := app
 target := $(buildDir)/$(executable)
 sources := $(call rwildcard,src/,*.cpp)
 objects := $(patsubst src/%, $(buildDir)/%, $(patsubst %.cpp, %.o, $(sources)))
 depends := $(patsubst %.o, %.d, $(objects))
-compileFlags := -std=c++17 -I include
-linkFlags = -L lib/$(platform) -l raylib
+compileFlags := -std=c++17 -I include $(bullet_cflags)
+linkFlags = -L lib/$(platform) -l raylib $(bullet_libs)
 
 # Check for Windows
 ifeq ($(OS), Windows_NT)
@@ -55,17 +60,18 @@ else
 endif
 
 # Lists phony targets for Makefile
-.PHONY: all setup submodules execute clean
+.PHONY: all setup submodules execute clean copy_assets
 
 # Default target, compiles, executes and cleans
-all: $(target) execute clean
+all: $(target) execute clean 
 
 # Sets up the project for compiling, generates includes and libs
-setup: include lib
+setup: include lib copy_assets
 
-# Pull and update the the build submodules
+# Pull and update the the build submodules (+ bullet)
 submodules:
 	git submodule update --init --recursive --depth 1
+
 
 # Copy the relevant header files into includes
 include: submodules
@@ -91,6 +97,10 @@ $(target): $(objects)
 $(buildDir)/%.o: src/%.cpp Makefile
 	$(MKDIR) $(call platformpth, $(@D))
 	$(CXX) -MMD -MP -c $(compileFlags) $< -o $@ $(CXXFLAGS)
+
+copy_assets:
+	mkdir -p $(buildDir)/$(assetsDir)
+	cp -r $(assetsDir)/* $(buildDir)/$(assetsDir)
 
 # Run the executable
 execute:
