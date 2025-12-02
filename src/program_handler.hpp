@@ -9,6 +9,7 @@
 #include "modules/renderer.hpp"
 #include "modules/shared_state.hpp"
 #include "modules/physics_shaper.hpp"
+#include "modules/third-party/entt.hpp"
 
 /**
  * @brief Main program handler. Integrates all the sub-components.
