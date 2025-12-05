@@ -1,11 +1,16 @@
 #pragma once
 #include "btBulletDynamicsCommon.h"
 #include "raylib.h"
+#include "shared_state.hpp"
 
 namespace physics {
 
 class Bridge {
 public:
-  Transform computeObjectTransformForRenderer(btCollisionObject *obj);
+  void process(SharedState& state);
+  
+private: 
+  void poseTranslate(SharedState& state);
 };
+
 }

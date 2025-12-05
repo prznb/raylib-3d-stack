@@ -1,19 +1,28 @@
 #include "program_handler.hpp"
+#include "modules/shared_state.hpp"
 #include "raylib.h"
 
 
 
-ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug"), _dw(_s, _pb) 
+ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug")
 {
   _w.SetTargetFPS(60);
 }
 
 void ProgramHandler::run() 
 {  
-  _dw.setup();
-  // For the tests - this is a single and the same object in two representation
-  _dw.addObject();
-  _r.addObject();
+  _dw.setup(_ss);
+  _r.setup(_ss);
+  _ss.verify();
+
+  for(int i = 0; i<50; ++i)
+  {
+  _dw.addObject(_ss);
+  _r.addObject(_ss);
+  _ss.verify();
+  }
+
+  
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {
@@ -21,6 +30,7 @@ void ProgramHandler::run()
     _ieh.process(_ss); // Input events
     _s.process(_ss);   // Physics shaper
     _dw.process(_ss);  // Physics world
+    _pb.process(_ss);  // Physics - to renderer bridge
     _r.process(_ss);   // Renderer/Object
     _cc.process(_ss);  // Camera
     _gh.process(_ss);  // Gui overlay
@@ -28,15 +38,9 @@ void ProgramHandler::run()
     BeginDrawing();
     ClearBackground(RAYWHITE);
     BeginMode3D(_cc.getCamera());
-
     _r.display(_ss);
-    
-    DrawGrid(250, 2);
-    
     EndMode3D();
-    
     _gh.display(_ss);
-  
     EndDrawing();
   }
 }
