@@ -1,7 +1,5 @@
 #pragma once
-#include "LinearMath/btAlignedObjectArray.h"
-#include "LinearMath/btTransform.h"
-#include "physics_bridge.hpp"
+#include "btBulletDynamicsCommon.h"
 #include "physics_shaper.hpp"
 #include "shared_state.hpp"
 #include <memory>
@@ -23,6 +21,7 @@ public:
 private:
   // Internal member functions
   void updateObjectTransforms(SharedState& state);
+  void translateObjectTransforms(SharedState& state);
 
   // Bullet Physics World
   btDefaultCollisionConfiguration *collisionConfiguration;

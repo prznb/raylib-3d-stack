@@ -30,7 +30,6 @@ void ProgramHandler::run()
     _ieh.process(_ss); // Input events
     _s.process(_ss);   // Physics shaper
     _dw.process(_ss);  // Physics world
-    _pb.process(_ss);  // Physics - to renderer bridge
     _r.process(_ss);   // Renderer/Object
     _cc.process(_ss);  // Camera
     _gh.process(_ss);  // Gui overlay
