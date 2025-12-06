@@ -21,12 +21,12 @@ public:
   void run();
 
 private:
-  SharedState _ss;
-  raylib::Window _w;
-  CameraHandler _cc;
-  renderer::Scene _r;
-  InputEventHandler _ieh;
-  physics::World _dw;
-  physics::Shaper _s;
-  gui::Handler _gh;
+  SharedState _state;
+  raylib::Window _window_handler;
+  CameraHandler _camera_handler;
+  renderer::Scene _renderer_scene;
+  InputEventHandler _input_events;
+  physics::World _bullet_physics;
+  physics::Shaper _bullet_physics_ext_interface;
+  gui::Handler _gui;
 };
