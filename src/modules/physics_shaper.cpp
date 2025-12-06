@@ -1,4 +1,6 @@
 #include "physics_shaper.hpp"
+#include "raymath.h"
+#include "shared_state.hpp"
 
 /** @brief Apply forces and torquest to the object
  *
@@ -6,6 +8,20 @@
  * https://stackoverflow.com/questions/1677059/bullet-physics-apply-torque-impulse-in-bodys-local-space
  */
 namespace physics {
+
+void Shaper::zeroAll(SharedState& state) {
+  for (auto force : state.external_object_forces) {
+    force.first = 1;
+    force.second.setZero();
+  }
+  for (auto torque : state.external_object_torques) {
+    torque.first = 1;
+    torque.second.setZero();
+  }
+
+  _impulse_direction.setZero();
+  _torque_direction.setZero();
+}
 
 // Private
 void Shaper::captureInput() {
@@ -21,8 +37,6 @@ void Shaper::captureInput() {
 
 // Public
 Shaper::Shaper() {
-  _impulse_direction.setZero();
-  _torque_direction.setZero();
   _impulse_force = 1E4;
   _torque = 1E3;
   _capture_for_impulse = Vector3Zero();
@@ -31,12 +45,12 @@ Shaper::Shaper() {
 
 void Shaper::process(SharedState &state) {
   if (state.io != SHAPER) {
-    state.player_force_input.setZero();
-    state.player_torque_input.setZero();
+    // Zero all external forces/torques
+    //zeroAll(state);
+    // Clear capture placeholders
     _capture_for_impulse = Vector3Zero();
     _capture_for_torques = Vector3Zero();
-    _impulse_direction.setZero();
-    _torque_direction.setZero();
+
     return;
   }
 
@@ -53,8 +67,8 @@ void Shaper::process(SharedState &state) {
   _torque_direction.setZ(_capture_for_torques.z);
   _torque_direction.norm();
 
-  state.player_force_input = _impulse_direction * _impulse_force;
-  state.player_torque_input = _torque_direction * _torque;
+  // state.external_object_forces = _impulse_direction * _impulse_force;
+  // state.external_object_torques = _torque_direction * _torque;
 }
 
 } // namespace physics

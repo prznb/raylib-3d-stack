@@ -1,9 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "shared_state.hpp"
-#include "raymath.hpp"
 #include <memory>
-#include <vector>
 
 
 namespace renderer {
@@ -11,19 +9,20 @@ namespace renderer {
 
 class Object {
 public:
-  Object();
+  Object(Color tint,  Vector3 mesh_dimensions);
   ~Object();
 
-  void process(SharedState &state);
-
+  void process(RendererObjectTransform& new_transform);
   void display(SharedState &state);
   
-private:
+  RendererObjectTransform getPose();
+
+  private:
   Model _model;
   Texture2D _texture;
   //Material _material;
   Color _tint;
-  Transform _pose; // Right-handed, +Y == UP
+  RendererObjectTransform _pose; // Right-handed, +Y == UP
   Vector3 _scale;
 };
 
@@ -35,11 +34,15 @@ public:
   Scene() {};
   ~Scene() = default;
 
-  void addObject();
+  void addObject(SharedState& state);
+
+  void addGround(SharedState& state);
+
+  void setup(SharedState& state);
 
   void process(SharedState& state);
 
-  void display(SharedState &state);
+  void display(SharedState& state);
 };
 
 } // namespace renderer

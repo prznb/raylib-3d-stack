@@ -1,7 +1,7 @@
 #include "camera_handler.hpp"
 
 CameraHandler::CameraHandler() {
-  _camera.position = (Vector3){0.0f, 2.0f, 4.0f}; // Camera position
+  _camera.position = (Vector3){0.0f, 2.0f, 100.0f}; // Camera position
   _camera.target = (Vector3){0.0f, 2.0f, 0.0f};   // Camera looking at point
   _camera.up =
       (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation towards target)
@@ -34,15 +34,15 @@ void CameraHandler::process(SharedState &state) {
   }
 
   else if (state.io == PLAYER || state.io == SHAPER) {
-    // Global frame coordinates
+    // World frame coordinates
     float x, y, z;
 
-    x = state.current_player_pose.translation.x;
-    y = state.current_player_pose.translation.y - _cposoff_y; // - test_offset;
-    z = state.current_player_pose.translation.z - _cposoff_z;
+    x = state.selected_object_pose.wf_translation.x;
+    y = state.selected_object_pose.wf_translation.y - _cposoff_y; // - test_offset;
+    z = state.selected_object_pose.wf_translation.z - _cposoff_z;
 
     _camera.position = Vector3{x, y, z};
-    _camera.target = state.current_player_pose.translation;
+    _camera.target = state.selected_object_pose.wf_translation;
     // _camera.up ??
   }
 } // process

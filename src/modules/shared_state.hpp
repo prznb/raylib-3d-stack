@@ -1,14 +1,29 @@
 #pragma once
+
+// Bullet 
 #include "LinearMath/btVector3.h"
+#include "LinearMath/btAlignedObjectArray.h"
+#include "LinearMath/btTransform.h"
+
+// Raylib
 #include "raylib.h"
-#include "btBulletDynamicsCommon.h"
-#include "raymath.h"
+
+
+// std C++
+#include <memory>
+#include <vector>
+#include <iostream>
 
 typedef enum InputOwner{
   CAMERA = 0,
   PLAYER, 
   SHAPER
 }InputOwner;
+
+typedef struct RendererObjectTransform{
+    Vector3 wf_translation = {0.f, 0.f, 0.f};    // Translation in world frame
+    Vector3 wf_rotation = {0.f, 0.f, 0.f};    // Rotation in world frame
+}RendererObjectTransform;
 
 /**
 * @brief Program-wide accessible collection of common states.
@@ -17,22 +32,31 @@ typedef enum InputOwner{
 */
 struct SharedState 
 {
+  SharedState(){};
+  ~SharedState() = default;
+
+  // Functions
+
   // Debug
-  bool debug = true;
+  bool debug = false;
 
   // Which subsystem is currently controlling the input
   InputOwner io = SHAPER;
 
-  // Renderer Representation
-  Transform current_player_pose;
+  // Object Representations
+  std::vector<RendererObjectTransform> object_poses_renderer;
+  std::vector<btTransform> object_poses_physics;
 
-  Vector3 getCurrentPlayerRotationEuler()
+  // Physics setpoint forces 
+  std::vector<std::pair<int, btVector3>> external_object_forces; 
+  std::vector<std::pair<int, btVector3>> external_object_torques;
+
+  // Quick lookup
+  RendererObjectTransform selected_object_pose;
+
+
+  void verify()
   {
-    return QuaternionToEuler(current_player_pose.rotation);
+    std::cout << "DEBUG: RENDERER AND PHYSICS OBJECT COUNT: " << object_poses_renderer.size() << " " <<  object_poses_physics.size() << std::endl;
   }
-
-  // Physics setpoint forces
-  btVector3 player_force_input{0.f, 0.f,0.f}; 
-  btVector3 player_torque_input{0.f, 0.f,0.f};
-
 };
