@@ -38,7 +38,7 @@ void Scene::addObject(SharedState &state) {
 
 void Scene::addGround(SharedState& state)
 {
-  auto new_object = std::make_unique<Object>(DARKGREEN, (Vector3){500.f,500.f,500.f});
+  auto new_object = std::make_unique<Object>(DARKGREEN, (Vector3){1E3,1E3,1E3});
   _objects.push_back(std::move(new_object));
   RendererObjectTransform new_object_transform;
   state.object_poses_renderer.push_back(new_object_transform);

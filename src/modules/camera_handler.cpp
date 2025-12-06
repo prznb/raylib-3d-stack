@@ -1,7 +1,7 @@
 #include "camera_handler.hpp"
 
 CameraHandler::CameraHandler() {
-  _camera.position = (Vector3){0.0f, 2.0f, 4.0f}; // Camera position
+  _camera.position = (Vector3){0.0f, 2.0f, 100.0f}; // Camera position
   _camera.target = (Vector3){0.0f, 2.0f, 0.0f};   // Camera looking at point
   _camera.up =
       (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation towards target)

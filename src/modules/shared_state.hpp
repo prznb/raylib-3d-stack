@@ -38,7 +38,7 @@ struct SharedState
   // Functions
 
   // Debug
-  bool debug = true;
+  bool debug = false;
 
   // Which subsystem is currently controlling the input
   InputOwner io = SHAPER;
