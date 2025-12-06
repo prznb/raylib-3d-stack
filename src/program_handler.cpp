@@ -2,8 +2,6 @@
 #include "modules/shared_state.hpp"
 #include "raylib.h"
 
-
-
 ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug")
 {
   _w.SetTargetFPS(60);
@@ -14,15 +12,6 @@ void ProgramHandler::run()
   _dw.setup(_ss);
   _r.setup(_ss);
   _ss.verify();
-
-  for(int i = 0; i<50; ++i)
-  {
-  _dw.addObject(_ss);
-  _r.addObject(_ss);
-  _ss.verify();
-  }
-
-  
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {
