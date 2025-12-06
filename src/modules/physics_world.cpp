@@ -2,7 +2,6 @@
 #include "physics_world.hpp"
 #include "LinearMath/btAlignedObjectArray.h"
 #include "shared_state.hpp"
-#include <iostream>
 #include <cstdlib>
 
 namespace physics {
@@ -121,6 +120,7 @@ void World::addGround(SharedState& state){
 void World::process(SharedState &state) {
   dynamicsWorld->stepSimulation(1.f / 60.f, 10);
   updateObjectTransforms(state);
+  translateObjectTransforms(state);
 }
 
 
@@ -140,6 +140,28 @@ void World::updateObjectTransforms(SharedState& state)
       trans = obj->getWorldTransform();
     }
     state.object_poses_physics[j] = trans;
+  }
+}
+
+void World::translateObjectTransforms(SharedState &state) 
+{
+  RendererObjectTransform rendererside_transform;
+
+  for (int i = 0; i < state.object_poses_physics.size(); ++i)
+  { 
+    btTransform trans_physics = state.object_poses_physics[i];
+
+    rendererside_transform.wf_translation =
+        Vector3{trans_physics.getOrigin().x(), trans_physics.getOrigin().y(),
+                trans_physics.getOrigin().z()};
+
+    trans_physics.getRotation().getEulerZYX(
+        rendererside_transform.wf_rotation.z,
+        rendererside_transform.wf_rotation.y,
+        rendererside_transform.wf_rotation.x);
+    
+    state.object_poses_renderer[i] = rendererside_transform;
+    
   }
 }
 

@@ -8,6 +8,8 @@
  *
  * ref:
  * https://stackoverflow.com/questions/1677059/bullet-physics-apply-torque-impulse-in-bodys-local-space
+ *
+ * @todo Fix it - it should be handled by the bullet control interfaces instead
  */
 namespace physics {
 
