@@ -13,8 +13,8 @@ public:
   Object(Color tint,  Vector3 mesh_dimensions);
   ~Object();
 
-  void process(RendererObjectTransform& new_transform);
-  void display(SharedState &state);
+  void process(const RendererObjectTransform& new_transform);
+  void display(Shared &state);
   
   RendererObjectTransform getPose();
 
@@ -27,21 +27,5 @@ public:
   Vector3 _scale;
 };
 
-class Scene 
-{
-  std::vector<std::unique_ptr<renderer::Object>> _objects;
-
-public:
-  Scene() {};
-  ~Scene() = default;
-
-  void addObject(json& obj_params);
-
-  void setup(SharedState& state);
-
-  void process(SharedState& state);
-
-  void display(SharedState& state);
-};
 
 } // namespace renderer

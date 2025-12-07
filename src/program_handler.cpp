@@ -25,8 +25,8 @@ void ProgramHandler::run()
     // Process program logic on the respective subsystems 
     _ieh.process(_ss); // Input events
     _s.process(_ss);   // Physics shaper
-    _dw.process(_ss);  // Physics world
-    _r.process(_ss);   // Renderer/Object
+    _dw.process(_ss, _s.passover());  // Physics world
+    _r.process(_ss, _dw.passover());   // Renderer/Object
     _cc.process(_ss);  // Camera
     _gh.process(_ss);  // Gui overlay
 

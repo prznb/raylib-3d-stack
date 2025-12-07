@@ -1,6 +1,6 @@
 #include "input_event_handler.hpp"
 
-void InputEventHandler::process(SharedState &state) {
+void InputEventHandler::process(Shared &state) {
   // Evaluate Input Processing Ownership
   if (IsKeyDown(KEY_C)) {
     state.io = CAMERA;

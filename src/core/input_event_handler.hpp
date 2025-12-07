@@ -8,5 +8,5 @@ class InputEventHandler {
 public:
   InputEventHandler(){};
 
-  void process(SharedState &state);
+  void process(Shared &state);
 };

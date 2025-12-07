@@ -8,7 +8,7 @@ public:
   CameraHandler();
   ~CameraHandler() = default;
 
-  void process(SharedState &state);
+  void process(Shared &state);
 
   const Camera &getCamera();
 

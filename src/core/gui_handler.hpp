@@ -11,8 +11,8 @@ class Handler {
   Vector3 _current_player_orientation = {0.f, 0.f, 0.f};
 
 public:
-  void process(SharedState &state);
+  void process(Shared &state);
 
-  void display(SharedState &state);
+  void display(Shared &state);
 };
 } // namespace gui

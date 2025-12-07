@@ -12,7 +12,7 @@ CameraHandler::CameraHandler() {
   _sang = 3.0f;
 }
 
-void CameraHandler::process(SharedState &state) {
+void CameraHandler::process(Shared &state) {
   if (state.io == CAMERA) {
     // Coodinates in local camera frame
     float dx, dy, dz;

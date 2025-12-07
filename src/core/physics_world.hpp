@@ -2,6 +2,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "physics_shaper.hpp"
 #include "shared_state.hpp"
+#include "types.hpp"
 #include <memory>
 #include <nlohmann/json_fwd.hpp>
 #include <vector>
@@ -15,13 +16,13 @@ public:
   ~World();
 
   void addObject(nlohmann::json& obj_params);
-  void setup(SharedState &state);
-  void process(SharedState &state);
+  void setup(Shared &state);
+  void process(Shared &state, const ExternalFT& eft);
+  const std::vector<RendererObjectTransform>& passover();
 
 private:
   // Internal member functions
-  void updateObjectTransforms(SharedState& state);
-  void translateObjectTransforms(SharedState& state);
+  void translateObjectTransforms(Shared& state);
 
   // Bullet Physics World
   btDefaultCollisionConfiguration *collisionConfiguration;
@@ -30,6 +31,9 @@ private:
   btSequentialImpulseConstraintSolver *solver;
   btDiscreteDynamicsWorld *dynamicsWorld;
   btAlignedObjectArray<btCollisionShape *> collisionShapes;
+
+  // Compat
+  std::vector<RendererObjectTransform> renderer_object_transforms;
 
 };
 } // namespace physics

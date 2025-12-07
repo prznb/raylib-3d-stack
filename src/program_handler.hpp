@@ -10,7 +10,7 @@ using json = nlohmann::json;
 #include "core/gui_handler.hpp"
 #include "core/input_event_handler.hpp"
 #include "core/physics_world.hpp"
-#include "core/renderer.hpp"
+#include "core/renderer_scene.hpp"
 #include "core/shared_state.hpp"
 #include "core/physics_shaper.hpp"
 //#include "modules/third-party/entt.hpp"
@@ -27,7 +27,7 @@ public:
   void run();
 
 private:
-  SharedState _ss;
+  Shared _ss;
   raylib::Window _w;
   CameraHandler _cc;
   renderer::Scene _r;

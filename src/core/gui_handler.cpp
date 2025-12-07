@@ -6,9 +6,9 @@
 #include "../modules/third-party/gui_window_file_dialog.h"
 #include "../modules/third-party/raygui.h"
 
-void gui::Handler::process(SharedState &state) {}
+void gui::Handler::process(Shared &state) {}
 
-void gui::Handler::display(SharedState &state) {
+void gui::Handler::display(Shared &state) {
   if (!state.debug) {
     return;
   }

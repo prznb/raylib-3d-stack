@@ -9,12 +9,12 @@
  */
 namespace physics {
 
-void Shaper::zeroAll(SharedState& state) {
-  for (auto force : state.external_object_forces) {
+void Shaper::zeroAll(Shared& state) {
+  for (auto force : _eft.external_object_forces) {
     force.first = 1;
     force.second.setZero();
   }
-  for (auto torque : state.external_object_torques) {
+  for (auto torque : _eft.external_object_torques) {
     torque.first = 1;
     torque.second.setZero();
   }
@@ -43,7 +43,7 @@ Shaper::Shaper() {
   _capture_for_torques = Vector3Zero();
 }
 
-void Shaper::process(SharedState &state) {
+void Shaper::process(Shared &state) {
   if (state.io != SHAPER) {
     // Zero all external forces/torques
     //zeroAll(state);
@@ -69,6 +69,11 @@ void Shaper::process(SharedState &state) {
 
   // state.external_object_forces = _impulse_direction * _impulse_force;
   // state.external_object_torques = _torque_direction * _torque;
+}
+
+const ExternalFT& Shaper::passover()
+{
+  return _eft;
 }
 
 } // namespace physics

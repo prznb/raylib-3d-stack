@@ -3,6 +3,7 @@
 #include "LinearMath/btAlignedObjectArray.h"
 #include "LinearMath/btVector3.h"
 #include "shared_state.hpp"
+#include "types.hpp"
 #include <cstdlib>
 
 namespace physics {
@@ -44,7 +45,7 @@ World::~World() {
   delete collisionConfiguration;
 }
 
-void World::setup(SharedState& state) {}
+void World::setup(Shared& state) {}
 
 void World::addObject(nlohmann::json& obj_params) {
   // create a dynamic rigidbody
@@ -83,42 +84,35 @@ void World::addObject(nlohmann::json& obj_params) {
   btRigidBody *body = new btRigidBody(rbInfo);
 
   dynamicsWorld->addRigidBody(body);
+  renderer_object_transforms.push_back(RendererObjectTransform());
 }
 
-
-void World::process(SharedState &state) {
+void World::process(Shared &state, const ExternalFT& eft) 
+{
   dynamicsWorld->stepSimulation(1.f / 60.f, 10);
-  updateObjectTransforms(state);
   translateObjectTransforms(state);
 }
 
-
-
-// Intermal member functions
-
-void World::updateObjectTransforms(SharedState& state)
+const std::vector<RendererObjectTransform>& World::passover()
 {
-    for (int j = 0; j < state.object_poses_physics.size(); j++) {
-    btCollisionObject *obj = dynamicsWorld->getCollisionObjectArray()[j];
-    btRigidBody *body = btRigidBody::upcast(obj);
-    btTransform trans;
-
-    if (body && body->getMotionState()) {
-      body->getMotionState()->getWorldTransform(trans);
-    } else {
-      trans = obj->getWorldTransform();
-    }
-    state.object_poses_physics[j] = trans;
-  }
+  return renderer_object_transforms;
 }
 
-void World::translateObjectTransforms(SharedState &state) 
+// Intermal member functions
+void World::translateObjectTransforms(Shared &state) 
 {
-  RendererObjectTransform rendererside_transform;
-
-  for (int i = 0; i < state.object_poses_physics.size(); ++i)
+  static RendererObjectTransform rendererside_transform;
+  for (int i = 0; i < dynamicsWorld->getCollisionObjectArray().size(); ++i)
   { 
-    btTransform trans_physics = state.object_poses_physics[i];
+    btCollisionObject *obj = dynamicsWorld->getCollisionObjectArray()[i];
+    btRigidBody *body = btRigidBody::upcast(obj);
+    btTransform trans_physics;
+
+    if (body && body->getMotionState()) {
+      body->getMotionState()->getWorldTransform(trans_physics);
+    } else {
+      trans_physics = obj->getWorldTransform();
+    }
 
     rendererside_transform.wf_translation =
         Vector3{trans_physics.getOrigin().x(), trans_physics.getOrigin().y(),
@@ -128,9 +122,8 @@ void World::translateObjectTransforms(SharedState &state)
         rendererside_transform.wf_rotation.z,
         rendererside_transform.wf_rotation.y,
         rendererside_transform.wf_rotation.x);
-    
-    state.object_poses_renderer[i] = rendererside_transform;
-    
+
+    renderer_object_transforms[i] = rendererside_transform;
   }
 }
 

@@ -2,6 +2,7 @@
 #include "LinearMath/btVector3.h"
 #include "raylib.h"
 #include "shared_state.hpp"
+#include "types.hpp"
 #include <memory>
 
 /** @brief Apply external forces and torques to the objects
@@ -23,13 +24,16 @@ class Shaper {
   float _impulse_force;
   float _torque;
 
+  ExternalFT _eft;
+  
   void captureInput();
-  void zeroAll(SharedState &state);
+  void zeroAll(Shared &state);
 
 public:
   Shaper();
 
-  void process(SharedState &state);
+  void process(Shared &state);
+  const ExternalFT& passover();
 
 
 };
