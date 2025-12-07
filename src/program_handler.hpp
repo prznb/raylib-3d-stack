@@ -1,13 +1,13 @@
 #pragma once
 #include <raylib-cpp.hpp>
 
-#include "modules/camera_handler.hpp"
-#include "modules/gui_handler.hpp"
-#include "modules/input_event_handler.hpp"
-#include "modules/physics_world.hpp"
-#include "modules/renderer.hpp"
-#include "modules/shared_state.hpp"
-#include "modules/physics_shaper.hpp"
+#include "core/camera_handler.hpp"
+#include "core/gui_handler.hpp"
+#include "core/input_event_handler.hpp"
+#include "core/physics_world.hpp"
+#include "core/renderer.hpp"
+#include "core/shared_state.hpp"
+#include "core/physics_shaper.hpp"
 //#include "modules/third-party/entt.hpp"
 
 /**

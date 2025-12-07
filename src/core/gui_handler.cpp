@@ -3,8 +3,8 @@
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "gui_handler.hpp"
 #include "raylib.h"
-#include "third-party/gui_window_file_dialog.h"
-#include "third-party/raygui.h"
+#include "../modules/third-party/gui_window_file_dialog.h"
+#include "../modules/third-party/raygui.h"
 
 void gui::Handler::process(SharedState &state) {}
 

@@ -1,6 +1,5 @@
 #include "program_handler.hpp"
-#include "modules/shared_state.hpp"
-#include "raylib.h"
+
 
 ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug")
 {
