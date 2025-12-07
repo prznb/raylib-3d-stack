@@ -1,4 +1,5 @@
 #pragma once
+#include "program_manager.hpp"
 #include "raylib.h"
 #include <nlohmann/json_fwd.hpp>
 #include <raylib-cpp.hpp>
@@ -27,6 +28,7 @@ public:
   void run();
 
 private:
+  // Core
   Shared _ss;
   raylib::Window _w;
   CameraHandler _cc;
@@ -36,61 +38,7 @@ private:
   physics::Shaper _s;
   gui::Handler _gh;
 
-  void spawnGround()
-  {
-    // Test Object
-    json obj_params;
-    
-    // Shared Properties
-    obj_params["type"] = "cube";
-    obj_params["side_length"] = 1E3;
-    
-    obj_params["color"]["r"] = 0;
-    obj_params["color"]["g"] = 0;
-    obj_params["color"]["b"] = 255;
-    obj_params["color"]["a"] = 255;
+  // Management
+  ProgramManager _m;
 
-    obj_params["mass"] = 0.f;
-    obj_params["inertia"] = 0.f;
-    //-250, -500, -250
-    obj_params["position"]["x"] = -250;
-    obj_params["position"]["y"] = -500;
-    obj_params["position"]["z"] = -250;
-    obj_params["rotation"]["yaw"]   = 0.f;
-    obj_params["rotation"]["pitch"]  = 0.f;
-    obj_params["rotation"]["roll"] = 0.f;
-
-    _r.addObject(obj_params);
-    _dw.addObject( obj_params);
-    _ss.registerEvent(OBJECT_ADDED);
-  }
-
-  void spawnObject()
-  {
-    // Test Object
-    json obj_params;
-    
-    // Shared Properties
-    obj_params["type"] = "cube";
-    obj_params["side_length"] = 5.f;
-    
-    obj_params["color"]["r"] = 255;
-    obj_params["color"]["g"] = 0;
-    obj_params["color"]["b"] = 0;
-    obj_params["color"]["a"] = 255;
-
-    obj_params["mass"] = 10.f;
-    obj_params["inertia"] = 10.f;
-    obj_params["position"]["x"] = 0.f;
-    obj_params["position"]["y"] = 10.f;
-    obj_params["position"]["z"] = 0.f;
-    obj_params["rotation"]["yaw"]   = 0.f;
-    obj_params["rotation"]["pitch"]  = 0.f;
-    obj_params["rotation"]["roll"] = 1.f;
-
-
-    _r.addObject(obj_params);
-    _dw.addObject( obj_params);
-    _ss.registerEvent(OBJECT_ADDED);
-  }
 };

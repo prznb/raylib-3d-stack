@@ -1,24 +1,15 @@
 #include "program_handler.hpp"
 
 
-ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug")
+ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug"), 
+                                   _m(_ss,_r,_dw)
 {
   _w.SetTargetFPS(60);
 }
 
 void ProgramHandler::run() 
 {  
-  _dw.setup(_ss);
-  _r.setup(_ss);
-
-  spawnGround();
-  for(int i = 0; i<10; ++i)
-  {
-    spawnObject();
-  }
-
-  _ss.verify();
-
+  _m.setup();
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {
