@@ -3,7 +3,9 @@
 #include "physics_shaper.hpp"
 #include "shared_state.hpp"
 #include <memory>
+#include <nlohmann/json_fwd.hpp>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace physics {
 class World {
@@ -12,11 +14,9 @@ public:
   World();
   ~World();
 
-  void addObject(SharedState& state);
-  void addGround(SharedState& state);
+  void addObject(nlohmann::json& obj_params);
   void setup(SharedState &state);
   void process(SharedState &state);
-
 
 private:
   // Internal member functions

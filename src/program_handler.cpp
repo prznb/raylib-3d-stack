@@ -10,7 +10,15 @@ void ProgramHandler::run()
 {  
   _dw.setup(_ss);
   _r.setup(_ss);
+
+  spawnGround();
+  for(int i = 0; i<10; ++i)
+  {
+    spawnObject();
+  }
+
   _ss.verify();
+
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {

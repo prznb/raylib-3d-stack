@@ -14,6 +14,10 @@
 #include <vector>
 #include <iostream>
 
+typedef enum Event{
+  OBJECT_ADDED = 0,
+}Event;
+
 typedef enum InputOwner{
   CAMERA = 0,
   PLAYER, 
@@ -36,6 +40,18 @@ struct SharedState
   ~SharedState() = default;
 
   // Functions
+  void registerEvent(Event ev)
+  {
+    switch (ev) {
+      case OBJECT_ADDED:
+        object_poses_renderer.push_back(RendererObjectTransform());
+        object_poses_physics.push_back(btTransform());
+      break;
+
+      default:
+      return;
+    }
+  }
 
   // Debug
   bool debug = false;

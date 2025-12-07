@@ -2,10 +2,11 @@
 #include "raylib.h"
 #include "shared_state.hpp"
 #include <memory>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 
 namespace renderer {
-
 
 class Object {
 public:
@@ -34,9 +35,7 @@ public:
   Scene() {};
   ~Scene() = default;
 
-  void addObject(SharedState& state);
-
-  void addGround(SharedState& state);
+  void addObject(json& obj_params);
 
   void setup(SharedState& state);
 

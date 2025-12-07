@@ -4,6 +4,7 @@
 #include "shared_state.hpp"
 #include <cstdlib>
 
+
 namespace renderer {
 
 Object::Object(Color tint, Vector3 mesh_dimensions) {
@@ -25,30 +26,15 @@ void Object::display(SharedState &state) {
 
 RendererObjectTransform Object::getPose() { return _pose; }
 
-void Scene::addObject(SharedState &state) {
-  int rand_idx = rand()%4;
-  Color rand_color_arr[4] = {RED, BLUE, GREEN, MAROON};
-  Color rand_color = rand_color_arr[rand_idx];
+void Scene::addObject(nlohmann::json& obj_params) {
+  Color c = {obj_params["color"]["r"], obj_params["color"]["g"], obj_params["color"]["b"], obj_params["color"]["a"]};
+  Vector3 dim = Vector3Scale(Vector3One(), obj_params["side_length"]);
 
-  auto new_object = std::make_unique<Object>(rand_color, (Vector3){5.f, 5.f, 5.f});
+  auto new_object = std::make_unique<Object>(c, dim);
   _objects.push_back(std::move(new_object));
-  RendererObjectTransform new_object_transform; 
-  state.object_poses_renderer.push_back(new_object_transform);
 }
 
-void Scene::addGround(SharedState& state)
-{
-  auto new_object = std::make_unique<Object>(DARKGREEN, (Vector3){1E3,1E3,1E3});
-  _objects.push_back(std::move(new_object));
-  RendererObjectTransform new_object_transform;
-  state.object_poses_renderer.push_back(new_object_transform);
-}
-
-
-void Scene::setup(SharedState &state) {
-  addGround(state);
-  srand(time(0));
-}
+void Scene::setup(SharedState &state) {}
 
 void Scene::process(SharedState &state) {
   for (int i = 0; i < _objects.size(); ++i) {

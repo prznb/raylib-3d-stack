@@ -1,6 +1,7 @@
 #pragma once
 #include "physics_world.hpp"
 #include "LinearMath/btAlignedObjectArray.h"
+#include "LinearMath/btVector3.h"
 #include "shared_state.hpp"
 #include <cstdlib>
 
@@ -43,14 +44,12 @@ World::~World() {
   delete collisionConfiguration;
 }
 
-void World::setup(SharedState& state) {
-  addGround(state);
-}
+void World::setup(SharedState& state) {}
 
-void World::addObject(SharedState& state) {
+void World::addObject(nlohmann::json& obj_params) {
   // create a dynamic rigidbody
-
-  btCollisionShape *colShape = new btBoxShape(btVector3(2.5f, 2.5f, 2.5f));
+  btVector3 dim = {(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f};
+  btCollisionShape *colShape = new btBoxShape(dim);
   // btCollisionShape *colShape = new btSphereShape(btScalar(1.));
   collisionShapes.push_back(colShape);
 
@@ -58,19 +57,21 @@ void World::addObject(SharedState& state) {
   btTransform startTransform;
   startTransform.setIdentity();
 
-
-  btScalar mass(10);
+  btScalar mass(obj_params["mass"]);
 
   // rigidbody is dynamic if and only if mass is non zero, otherwise static
   bool isDynamic = (mass != 0.f);
 
-  btVector3 localInertia(10.f, 10.f, 10.f);
+  btVector3 localInertia = {obj_params["inertia"],obj_params["inertia"],obj_params["inertia"]};
+
   if (isDynamic)
     colShape->calculateLocalInertia(mass, localInertia);
 
-  startTransform.setOrigin(btVector3(0,rand()%21, 1));
+  btVector3 position = {obj_params["position"]["x"], obj_params["position"]["y"], obj_params["position"]["z"]};
+  startTransform.setOrigin(position);
+
   static btQuaternion q_init;
-  q_init.setEulerZYX(0.f, 0.f, 1.f);
+  q_init.setEulerZYX(obj_params["rotation"]["yaw"], obj_params["rotation"]["pitch"], obj_params["rotation"]["roll"]);
   startTransform.setRotation(q_init);
 
   // using motionstate is recommended, it provides interpolation capabilities,
@@ -82,40 +83,8 @@ void World::addObject(SharedState& state) {
   btRigidBody *body = new btRigidBody(rbInfo);
 
   dynamicsWorld->addRigidBody(body);
-  state.object_poses_physics.push_back(startTransform);
 }
 
-void World::addGround(SharedState& state){
-  btCollisionShape *groundShape =
-      new btBoxShape(btVector3(btScalar(500.), btScalar(500.), btScalar(500.)));
-
-  collisionShapes.push_back(groundShape);
-
-  btTransform groundTransform;
-  groundTransform.setIdentity();
-  groundTransform.setOrigin(btVector3(-250, -500, -250));
-
-  btScalar mass(0.);
-
-  // rigidbody is dynamic if and only if mass is non zero, otherwise static
-  bool isDynamic = (mass != 0.f);
-
-  btVector3 localInertia(0, 0, 0);
-  if (isDynamic)
-    groundShape->calculateLocalInertia(mass, localInertia);
-
-  // using motionstate is optional, it provides interpolation capabilities,
-  // and only synchronizes 'active' objects
-  btDefaultMotionState *myMotionState =
-      new btDefaultMotionState(groundTransform);
-  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState,
-                                                  groundShape, localInertia);
-  btRigidBody *body = new btRigidBody(rbInfo);
-
-  // add the body to the dynamics world
-  dynamicsWorld->addRigidBody(body);
-  state.object_poses_physics.push_back(groundTransform);
-}
 
 void World::process(SharedState &state) {
   dynamicsWorld->stepSimulation(1.f / 60.f, 10);
