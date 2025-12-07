@@ -21,6 +21,7 @@ public:
   void run();
 
 private:
+  // Member variables
   SharedState _state;
   raylib::Window _window_handler;
   CameraHandler _camera_handler;
