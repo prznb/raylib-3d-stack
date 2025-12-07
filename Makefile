@@ -13,6 +13,9 @@ platformpth = $(subst /,$(PATHSEP),$1)
 bullet_cflags := $(shell pkg-config --cflags bullet 2>/dev/null)
 bullet_libs   := $(shell pkg-config --libs bullet 2>/dev/null)
 
+# Add json via pkg-config 
+json_cflags := $(shell pkg-config nlohmann_json --cflags)
+
 # Set global macros
 buildDir := bin
 assetsDir := assets
@@ -21,7 +24,7 @@ target := $(buildDir)/$(executable)
 sources := $(call rwildcard,src/,*.cpp)
 objects := $(patsubst src/%, $(buildDir)/%, $(patsubst %.cpp, %.o, $(sources)))
 depends := $(patsubst %.o, %.d, $(objects))
-compileFlags := -std=c++17 -I include $(bullet_cflags)
+compileFlags := -std=c++17 -I include $(bullet_cflags) $(json_cflags)
 linkFlags = -L lib/$(platform) -l raylib $(bullet_libs)
 
 # Check for Windows
@@ -71,7 +74,8 @@ setup: include lib copy_assets
 # Pull and update the the build submodules (+ bullet)
 submodules:
 	git submodule update --init --recursive --depth 1
-	sudo apt install libbullet-dev 
+	sudo apt install libbullet-dev
+	sudo apt-get install nlohmann-json3-dev
 
 
 # Copy the relevant header files into includes
