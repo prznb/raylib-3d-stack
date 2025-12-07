@@ -6,19 +6,13 @@
 
 namespace renderer {
 
-Object::Object(SharedObjectParams& params) {
-  auto p_set = params.getRender();
-
-  if(p_set.get("TYPE") == "CUBE")
-  {
-    Mesh m = GenMeshCube(p_set["EDGE_LEN"],p_set["EDGE_LEN"],p_set["EDGE_LEN"]);
-    _model = LoadModelFromMesh(m);
-    _pose.wf_translation = {0.f, 0.f, 0.f};
-    _pose.wf_rotation = {0.f, 0.f, 0.f};
-    _scale = {1.0f, 1.0f, 1.0f};
-    _tint = tint;
-  }
-
+Object::Object(Color tint, Vector3 mesh_dimensions) {
+  Mesh m = GenMeshCube(mesh_dimensions.x, mesh_dimensions.y, mesh_dimensions.z);
+  _model = LoadModelFromMesh(m);
+  _pose.wf_translation = {0.f, 0.f, 0.f};
+  _pose.wf_rotation = {0.f, 0.f, 0.f};
+  _scale = {1.0f, 1.0f, 1.0f};
+  _tint = tint;
 }
 Object::~Object() { UnloadModel(_model); };
 
@@ -44,12 +38,8 @@ void Scene::addObject(SharedState &state) {
 
 void Scene::addGround(SharedState& state)
 {
-  SharedObjectParams* params = new SharedObjectParams();
-  params->constructParamsCube(500, 1E3, 1E3, 1E3, DARKGREEN);
-  auto new_object = std::make_unique<Object>(*params);
+  auto new_object = std::make_unique<Object>(DARKGREEN, (Vector3){1E3,1E3,1E3});
   _objects.push_back(std::move(new_object));
-  delete params;
-
   RendererObjectTransform new_object_transform;
   state.object_poses_renderer.push_back(new_object_transform);
 }

@@ -9,7 +9,7 @@ namespace renderer {
 
 class Object {
 public:
-  Object(SharedObjectParams& params);
+  Object(Color tint,  Vector3 mesh_dimensions);
   ~Object();
 
   void process(RendererObjectTransform& new_transform);
