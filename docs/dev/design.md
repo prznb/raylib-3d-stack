@@ -1,3 +1,20 @@
+## Requirements for 0.0.1
+
+* [ ] (Abstract) Object support:
+    * [ ] cubes
+    * [ ] cones
+    * [ ] spheres
+    * [ ] capsules
+* [ ] (Physics) Object inertia inference from shape and mass
+* [ ] Save and load mesh configuration to the scene from HDD files
+* [ ] Program modes:
+    * [ ] *EDIT* - place actors on the screen
+    * [ ] *RUN* - runs the simulation
+* [ ] GUI: 
+    * [ ] Interface for placing objects
+    * [ ] Display the number of objects in the world/scene
+
+
 ## Dev
 Codebase Design Considerations:
 * Avoid using raylib-cpp wrapper!
