@@ -1,11 +1,11 @@
 ## Requirements for 0.0.1
 
 * [ ] (Abstract) Object support:
-    * [ ] cubes
-    * [ ] cones
-    * [ ] spheres
+    * [x] cubes
+    * [ ] cylinders
+    * [x] spheres
     * [ ] capsules
-* [ ] (Physics) Object inertia inference from shape and mass
+* [ ] ~(Physics) Object inertia inference from shape and mass~ Why?
 * [ ] Save and load mesh configuration to the scene from HDD files
 * [ ] Program modes:
     * [ ] *EDIT* - place actors on the screen
@@ -13,6 +13,10 @@
 * [ ] GUI: 
     * [ ] Interface for placing objects
     * [ ] Display the number of objects in the world/scene
+
+## Requirements for 0.0.2
+
+* [ ] Spawn and track joints (constraints)
 
 
 ## Dev

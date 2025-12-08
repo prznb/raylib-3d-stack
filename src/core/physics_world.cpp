@@ -46,24 +46,23 @@ World::~World() {
   delete collisionConfiguration;
 }
 
-void World::setup(Shared& state) {}
+void World::setup(Shared &state) {}
 
-void World::addObject(nlohmann::json& obj_params) {
+void World::addObject(nlohmann::json &obj_params) {
   // create a dynamic rigidbody
   btCollisionShape *colShape;
-  if(obj_params["type"] == "cube")
-  {
-    btVector3 dim = {(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f};
+  if (obj_params["type"] == "cube") {
+    btVector3 dim = {(float)(obj_params["dimensions"]["width"]) / 2.f,
+                     (float)(obj_params["dimensions"]["height"]) / 2.f,
+                     (float)(obj_params["dimensions"]["length"]) / 2.f};
     colShape = new btBoxShape(dim);
     collisionShapes.push_back(colShape);
-  }
-  else if(obj_params["type"] == "sphere")
-  {
-    btScalar radius = obj_params["radius"];
+  } 
+  else if (obj_params["type"] == "sphere") {
+    btScalar radius = obj_params["dimensions"]["radius"];
     colShape = new btSphereShape(radius);
     collisionShapes.push_back(colShape);
   }
-
 
   /// Create Dynamic Objects
   btTransform startTransform;
@@ -74,16 +73,21 @@ void World::addObject(nlohmann::json& obj_params) {
   // rigidbody is dynamic if and only if mass is non zero, otherwise static
   bool isDynamic = (mass != 0.f);
 
-  btVector3 localInertia = {obj_params["inertia"],obj_params["inertia"],obj_params["inertia"]};
+  btVector3 localInertia = {obj_params["inertia"], obj_params["inertia"],
+                            obj_params["inertia"]};
 
   if (isDynamic)
     colShape->calculateLocalInertia(mass, localInertia);
 
-  btVector3 position = {obj_params["position"]["x"], obj_params["position"]["y"], obj_params["position"]["z"]};
+  btVector3 position = {obj_params["position"]["x"],
+                        obj_params["position"]["y"],
+                        obj_params["position"]["z"]};
   startTransform.setOrigin(position);
 
   static btQuaternion q_init;
-  q_init.setEulerZYX(obj_params["rotation"]["yaw"], obj_params["rotation"]["pitch"], obj_params["rotation"]["roll"]);
+  q_init.setEulerZYX(obj_params["rotation"]["yaw"],
+                     obj_params["rotation"]["pitch"],
+                     obj_params["rotation"]["roll"]);
   startTransform.setRotation(q_init);
 
   // using motionstate is recommended, it provides interpolation capabilities,
@@ -98,23 +102,19 @@ void World::addObject(nlohmann::json& obj_params) {
   renderer_object_transforms.push_back(RendererObjectTransform());
 }
 
-void World::process(Shared &state, const ExternalFT& eft) 
-{
+void World::process(Shared &state, const ExternalFT &eft) {
   dynamicsWorld->stepSimulation(1.f / 60.f, 10);
   translateObjectTransforms(state);
 }
 
-const std::vector<RendererObjectTransform>& World::passover()
-{
+const std::vector<RendererObjectTransform> &World::passover() {
   return renderer_object_transforms;
 }
 
 // Intermal member functions
-void World::translateObjectTransforms(Shared &state) 
-{
+void World::translateObjectTransforms(Shared &state) {
   static RendererObjectTransform rendererside_transform;
-  for (int i = 0; i < dynamicsWorld->getCollisionObjectArray().size(); ++i)
-  { 
+  for (int i = 0; i < dynamicsWorld->getCollisionObjectArray().size(); ++i) {
     btCollisionObject *obj = dynamicsWorld->getCollisionObjectArray()[i];
     btRigidBody *body = btRigidBody::upcast(obj);
     btTransform trans_physics;
@@ -138,4 +138,4 @@ void World::translateObjectTransforms(Shared &state)
   }
 }
 
-}
+} // namespace physics

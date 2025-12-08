@@ -37,10 +37,12 @@ void gui::Handler::display(Shared &state) {
   float cursor_y_increment = 20;
 
   // Draw - Actor parameters
+  // Deprecated
+  /*
   GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
                           _offset_panel_height - LOWER_LIM_Y},
               "Actor Params");
-
+  
   cursor_y += cursor_y_increment;
   cursor_x += cursor_x_increment;
 
@@ -52,8 +54,7 @@ void gui::Handler::display(Shared &state) {
 
   cursor_y += cursor_y_increment;
 
-  // Deprecated
-  /*
+  
   DrawText(TextFormat("Applied Forces: X = %0.f, Y = %0.f, Z = %0.f",
                       state.external_object_forces.getX(),
                       state.external_object_forces.getY(),

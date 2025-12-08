@@ -11,13 +11,12 @@ Object::Object(json& obj_params)
 {
   if(obj_params["type"] == "cube")
   {
-    Vector3 mesh_dimensions = Vector3Scale(Vector3One(), obj_params["side_length"]);
-    Mesh m = GenMeshCube(mesh_dimensions.x, mesh_dimensions.y, mesh_dimensions.z);
+    Mesh m = GenMeshCube(obj_params["dimensions"]["width"],obj_params["dimensions"]["height"],obj_params["dimensions"]["length"] );
     _model = LoadModelFromMesh(m);
   }
   else if(obj_params["type"] == "sphere")
   {
-    float radius = obj_params["radius"];
+    float radius = obj_params["dimensions"]["radius"];
     int rings = obj_params["resolution"];
     int slices = obj_params["resolution"];
     Mesh m = GenMeshSphere(radius, rings, slices);

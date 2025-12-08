@@ -25,7 +25,7 @@
 struct Shared 
 {
   // Debug
-  bool debug = false;
+  bool debug = true;
 
   // Which subsystem is currently controlling the input
   InputOwner io = SHAPER;

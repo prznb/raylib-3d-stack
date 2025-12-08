@@ -1,5 +1,5 @@
 # raylib-3d-stack
 
-Basic raylib scene viewer/manager with Bullet physics.
+Simple raylib scene viewer/manager with Bullet physics.
 
 WIP.
