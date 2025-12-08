@@ -16,6 +16,7 @@ void gui::Handler::display(Shared &state) {
   DrawFPS(0, 0);
 
   // Draw canvas
+  /*
   _bottom_panel_height = GetScreenHeight() - _offset_panel_height;
   DrawLine(0, _bottom_panel_height, GetScreenWidth(), _bottom_panel_height,
            GRAY);
@@ -37,8 +38,7 @@ void gui::Handler::display(Shared &state) {
   float cursor_y_increment = 20;
 
   // Draw - Actor parameters
-  // Deprecated
-  /*
+
   GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
                           _offset_panel_height - LOWER_LIM_Y},
               "Actor Params");
