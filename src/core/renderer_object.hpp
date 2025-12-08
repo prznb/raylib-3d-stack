@@ -10,7 +10,7 @@ namespace renderer {
 
 class Object {
 public:
-  Object(Color tint,  Vector3 mesh_dimensions);
+  Object(json& obj_params);
   ~Object();
 
   void process(const RendererObjectTransform& new_transform);

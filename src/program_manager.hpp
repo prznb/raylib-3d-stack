@@ -2,80 +2,135 @@
 #include "core/physics_world.hpp"
 #include "core/renderer_scene.hpp"
 #include "core/shared_state.hpp"
+#include <vector>
 
+/**
+*  
+*/
 class ProgramManager {
   Shared &_shared;
   renderer::Scene &_scene;
   physics::World &_physics;
 
+  std::vector<json> _recipes; // stored here, for future scene saving
+
 public:
   ProgramManager(Shared &shared, renderer::Scene &scene,
                  physics::World &physics)
-      : _shared(shared), _scene(scene), _physics(physics) {};
+      : _shared(shared), _scene(scene), _physics(physics) 
+      {
+        // start randomizer for this translation unit 
+        srand(0);
+      };
   ~ProgramManager() = default;
 
-  void setup() {
-    _physics.setup(_shared);
-    _scene.setup(_shared);
-    _shared.verify();
+  void loadTestNRandomCubes(int n) 
+  {
+    json recipe_ground = recipeGroundDefault();
+    spawnObject(recipe_ground);
 
-    spawnGround();
-    for (int i = 0; i < 10; ++i) {
-      spawnObject();
+    for (int i = 0; i < n; ++i) {
+      json recipe_rand = recipeCubeRandom();
+      spawnObject(recipe_rand);
     }
   }
-  void spawnGround() {
-    // Test Object
-    json obj_params;
 
-    // Shared Properties
-    obj_params["type"] = "cube";
-    obj_params["side_length"] = 1E3;
-
-    obj_params["color"]["r"] = 0;
-    obj_params["color"]["g"] = 0;
-    obj_params["color"]["b"] = 255;
-    obj_params["color"]["a"] = 255;
-
-    obj_params["mass"] = 0.f;
-    obj_params["inertia"] = 0.f;
-    //-250, -500, -250
-    obj_params["position"]["x"] = -250;
-    obj_params["position"]["y"] = -500;
-    obj_params["position"]["z"] = -250;
-    obj_params["rotation"]["yaw"] = 0.f;
-    obj_params["rotation"]["pitch"] = 0.f;
-    obj_params["rotation"]["roll"] = 0.f;
-
-    _scene.addObject(obj_params);
-    _physics.addObject(obj_params);
-    _shared.registerEvent(OBJECT_ADDED);
+  void loadTestNRandomCubesAndSpheres(int n)
+  {
+    loadTestNRandomCubes(n);
+    // spheres
+    for (int i = 0; i < n; ++i) {
+      json recipe_sphere_rand = recipeSphereRandom();
+      spawnObject(recipe_sphere_rand);
+    }
   }
 
-  void spawnObject() {
-    // Test Object
-    json obj_params;
+private:
+  
+  void registerRecipe(json recipe)
+  {
+    _recipes.push_back(recipe);
+  }
 
+  /* Recipes */
+  json recipeGroundDefault()
+  {
+    json recipe;
     // Shared Properties
-    obj_params["type"] = "cube";
-    obj_params["side_length"] = 5.f;
+    recipe["type"] = "cube";
+    recipe["side_length"] = 1E3;
+    recipe["color"]["r"] = 0;
+    recipe["color"]["g"] = 0;
+    recipe["color"]["b"] = 255;
+    recipe["color"]["a"] = 255;
+    recipe["mass"] = 0.f;
+    recipe["inertia"] = 0.f;
+    //-250, -500, -250
+    recipe["position"]["x"] = -250;
+    recipe["position"]["y"] = -500;
+    recipe["position"]["z"] = -250;
+    recipe["rotation"]["yaw"] = 0.f;
+    recipe["rotation"]["pitch"] = 0.f;
+    recipe["rotation"]["roll"] = 0.f;
+    return recipe;
+  }
 
-    obj_params["color"]["r"] = 255;
-    obj_params["color"]["g"] = 0;
-    obj_params["color"]["b"] = 0;
-    obj_params["color"]["a"] = 255;
+  // Cube, random size, random position, random color
+  json recipeCubeRandom(int size_max = 10, int spread_max = 100)
+  {
+    json recipe;
 
-    obj_params["mass"] = 10.f;
-    obj_params["inertia"] = 10.f;
-    obj_params["position"]["x"] = 0.f;
-    obj_params["position"]["y"] = 10.f;
-    obj_params["position"]["z"] = 0.f;
-    obj_params["rotation"]["yaw"] = 0.f;
-    obj_params["rotation"]["pitch"] = 0.f;
-    obj_params["rotation"]["roll"] = 1.f;
+    recipe["type"] = "cube";
+    recipe["side_length"] = (float)(rand() % size_max);
 
-    _scene.addObject(obj_params);
-    _physics.addObject(obj_params);
+    recipe["color"]["r"] = (float)(rand() % 256);
+    recipe["color"]["g"] = (float)(rand() % 256);
+    recipe["color"]["b"] = (float)(rand() % 256);
+    recipe["color"]["a"] = 255;
+
+    recipe["mass"] = 10.f;
+    recipe["inertia"] = 10.f;
+    recipe["position"]["x"] = (float)(rand() % spread_max);
+    recipe["position"]["y"] = (float)(rand() % spread_max);
+    recipe["position"]["z"] = (float)(rand() % spread_max);
+    recipe["rotation"]["yaw"] = 0.f;
+    recipe["rotation"]["pitch"] = 0.f;
+    recipe["rotation"]["roll"] = 1.f;
+
+    return recipe;
+  }
+  
+  json recipeSphereRandom(int size_max = 10, int spread_max = 100)
+  {
+    json recipe;
+
+    recipe["type"] = "sphere";
+    recipe["radius"] = (float)(rand() % size_max);
+    recipe["resolution"] = (int)20; // 20 rings, 20 slices
+
+    recipe["color"]["r"] = (float)(rand() % 256);
+    recipe["color"]["g"] = (float)(rand() % 256);
+    recipe["color"]["b"] = (float)(rand() % 256);
+    recipe["color"]["a"] = 255;
+
+    recipe["mass"] = 10.f;
+    recipe["inertia"] = 10.f;
+    recipe["position"]["x"] = (float)(rand() % spread_max);
+    recipe["position"]["y"] = (float)(rand() % spread_max);
+    recipe["position"]["z"] = (float)(rand() % spread_max);
+    recipe["rotation"]["yaw"] = 0.f;
+    recipe["rotation"]["pitch"] = 0.f;
+    recipe["rotation"]["roll"] = 1.f;
+
+    return recipe;
+  }
+
+  // Spawner
+  void spawnObject(json recipe) 
+  {
+    _scene.addObject(recipe);
+    _physics.addObject(recipe);
     _shared.registerEvent(OBJECT_ADDED);
+    this->registerRecipe(std::move(recipe));
   }
 };

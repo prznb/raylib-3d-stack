@@ -1,6 +1,7 @@
 #pragma once
 #include "physics_world.hpp"
 #include "LinearMath/btAlignedObjectArray.h"
+#include "LinearMath/btScalar.h"
 #include "LinearMath/btVector3.h"
 #include "shared_state.hpp"
 #include "types.hpp"
@@ -49,10 +50,20 @@ void World::setup(Shared& state) {}
 
 void World::addObject(nlohmann::json& obj_params) {
   // create a dynamic rigidbody
-  btVector3 dim = {(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f};
-  btCollisionShape *colShape = new btBoxShape(dim);
-  // btCollisionShape *colShape = new btSphereShape(btScalar(1.));
-  collisionShapes.push_back(colShape);
+  btCollisionShape *colShape;
+  if(obj_params["type"] == "cube")
+  {
+    btVector3 dim = {(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f,(float)obj_params["side_length"]/2.f};
+    colShape = new btBoxShape(dim);
+    collisionShapes.push_back(colShape);
+  }
+  else if(obj_params["type"] == "sphere")
+  {
+    btScalar radius = obj_params["radius"];
+    colShape = new btSphereShape(radius);
+    collisionShapes.push_back(colShape);
+  }
+
 
   /// Create Dynamic Objects
   btTransform startTransform;

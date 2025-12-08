@@ -2,6 +2,10 @@
 #include "raylib.h"
 #include <vector>
 #include "LinearMath/btVector3.h"
+#include <nlohmann/json.hpp>
+
+
+using json = nlohmann::json;
 
 typedef enum Event{
   OBJECT_ADDED = 0,
@@ -23,3 +27,4 @@ typedef struct ExternalFT
   std::vector<std::pair<int, btVector3>> external_object_forces; 
   std::vector<std::pair<int, btVector3>> external_object_torques;
 } ExternalFT;
+

@@ -8,10 +8,7 @@
 namespace renderer {
 
 void Scene::addObject(nlohmann::json& obj_params) {
-  Color c = {obj_params["color"]["r"], obj_params["color"]["g"], obj_params["color"]["b"], obj_params["color"]["a"]};
-  Vector3 dim = Vector3Scale(Vector3One(), obj_params["side_length"]);
-
-  auto new_object = std::make_unique<Object>(c, dim);
+  auto new_object = std::make_unique<Object>(obj_params);
   _objects.push_back(std::move(new_object));
 }
 

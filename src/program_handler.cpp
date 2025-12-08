@@ -9,7 +9,7 @@ ProgramHandler::ProgramHandler() : _w(1000, 600, "Debug"),
 
 void ProgramHandler::run() 
 {  
-  _m.setup();
+  _m.loadTestNRandomCubesAndSpheres(100);
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {
