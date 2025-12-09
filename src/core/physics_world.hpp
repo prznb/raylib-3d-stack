@@ -18,7 +18,18 @@ public:
   void addObject(nlohmann::json& obj_params);
   void setup(Shared &state);
   void process(Shared &state, const ExternalFT& eft);
+
   const std::vector<RendererObjectTransform>& passover();
+
+  void save() 
+  {
+    // From the SDK manual:
+    btDefaultSerializer* serializer = new btDefaultSerializer();
+    this->dynamicsWorld->serialize(serializer);
+    FILE* file = fopen("testFile.bullet","wb");
+    fwrite(serializer->getBufferPointer(),serializer->getCurrentBufferSize(),1, file);
+    fclose(file);
+  }
 
 private:
   // Internal member functions
