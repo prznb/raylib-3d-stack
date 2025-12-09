@@ -63,9 +63,9 @@ void World::addObject(nlohmann::json &obj_params) {
     colShape = new btSphereShape(radius);
   }
   else if (obj_params["type"] == "cylinder") {
-    btVector3 dim = {(float)(obj_params["dimensions"]["radius"]),  // radius == half-extent
-                     (float)(obj_params["dimensions"]["height"])/2.f,
-                     (float)(obj_params["dimensions"]["radius"])};
+    btVector3 dim = {abs((float)(obj_params["dimensions"]["radius"])),  // radius == half-extent
+                     abs((float)(obj_params["dimensions"]["height"])/2.f),
+                     abs((float)(obj_params["dimensions"]["radius"]))};
     colShape = new btCylinderShape(dim);
   }
 
