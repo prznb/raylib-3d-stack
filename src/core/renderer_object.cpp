@@ -22,6 +22,12 @@ Object::Object(json& obj_params)
     Mesh m = GenMeshSphere(radius, rings, slices);
     _model = LoadModelFromMesh(m);
   }
+  else if(obj_params["type"] == "cylinder") 
+  {
+    Mesh m = GenMeshCylinder(obj_params["dimensions"]["radius"], obj_params["dimensions"]["height"], obj_params["resolution"]);
+    _model = LoadModelFromMesh(m);
+  }
+
 
   Color tint = {obj_params["color"]["r"], obj_params["color"]["g"], obj_params["color"]["b"], obj_params["color"]["a"]};
   

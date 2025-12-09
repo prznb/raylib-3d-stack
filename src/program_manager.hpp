@@ -18,9 +18,10 @@ public:
   ProgramManager(Shared &shared, renderer::Scene &scene, physics::World &physics);
   ~ProgramManager() = default;
 
+  // Loader test
   void loadTestNRandomCubes(int n);
-
   void loadTestNRandomCubesAndSpheres(int n);
+  void loadTestNRandomCylinders(int n); 
 
 private:
   /* Recipes */
@@ -28,6 +29,8 @@ private:
   json recipeGroundDefault();
   json recipeCubeRandom(int size_max = 10, int spread_max = 100);
   json recipeSphereRandom(int size_max = 10, int spread_max = 100);
+  json recipeCylinderRandom(int h_max = 10, int radius_max = 5, int spread_max = 100);
+
 
   // Spawner
   void spawnObject(json recipe);

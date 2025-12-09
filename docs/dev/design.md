@@ -2,9 +2,9 @@
 
 * [ ] (Abstract) Object support:
     * [x] cubes
-    * [ ] cylinders
+    * [x] cylinders
     * [x] spheres
-    * [ ] capsules
+    * [ ] ~capsules~ Nah
 * [ ] ~(Physics) Object inertia inference from shape and mass~ Why?
 * [ ] Save and load mesh configuration to the scene from HDD files
 * [ ] Program modes:

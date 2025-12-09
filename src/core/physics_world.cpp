@@ -1,5 +1,6 @@
 #pragma once
 #include "physics_world.hpp"
+#include "BulletCollision/CollisionShapes/btCylinderShape.h"
 #include "LinearMath/btAlignedObjectArray.h"
 #include "LinearMath/btScalar.h"
 #include "LinearMath/btVector3.h"
@@ -56,13 +57,19 @@ void World::addObject(nlohmann::json &obj_params) {
                      (float)(obj_params["dimensions"]["height"]) / 2.f,
                      (float)(obj_params["dimensions"]["length"]) / 2.f};
     colShape = new btBoxShape(dim);
-    collisionShapes.push_back(colShape);
   } 
   else if (obj_params["type"] == "sphere") {
     btScalar radius = obj_params["dimensions"]["radius"];
     colShape = new btSphereShape(radius);
-    collisionShapes.push_back(colShape);
   }
+  else if (obj_params["type"] == "cylinder") {
+    btVector3 dim = {(float)(obj_params["dimensions"]["radius"]),  // radius == half-extent
+                     (float)(obj_params["dimensions"]["height"])/2.f,
+                     (float)(obj_params["dimensions"]["radius"])};
+    colShape = new btCylinderShape(dim);
+  }
+
+  collisionShapes.push_back(colShape);
 
   /// Create Dynamic Objects
   btTransform startTransform;

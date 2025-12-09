@@ -17,7 +17,8 @@ void ProgramManager::loadTestNRandomCubes(int n) {
   }
 }
 
-void ProgramManager::loadTestNRandomCubesAndSpheres(int n) {
+void ProgramManager::loadTestNRandomCubesAndSpheres(int n) 
+{
   loadTestNRandomCubes(n);
   // spheres
   for (int i = 0; i < n; ++i) {
@@ -25,6 +26,20 @@ void ProgramManager::loadTestNRandomCubesAndSpheres(int n) {
     spawnObject(recipe_sphere_rand);
   }
 }
+
+void ProgramManager::loadTestNRandomCylinders(int n) 
+{
+  json recipe_ground = recipeGroundDefault();
+  spawnObject(recipe_ground);
+
+  for (int i = 0; i < n; ++i) 
+  {
+    json recipe_rand = recipeCylinderRandom();
+    spawnObject(recipe_rand);
+  }
+
+}
+
 
 void ProgramManager::registerRecipe(json recipe) { _recipes.push_back(recipe); }
 
@@ -102,6 +117,33 @@ json ProgramManager::recipeSphereRandom(int size_max, int spread_max) {
 
   return recipe;
 }
+
+json ProgramManager::recipeCylinderRandom(int h_max, int radius_max, int spread_max)
+{
+  json recipe;
+
+  recipe["type"] = "cylinder";
+  recipe["dimensions"]["height"] = (float)(1+rand() % h_max);
+  recipe["dimensions"]["radius"] = (float)(1+rand() % radius_max);
+  recipe["resolution"] = (int)20;
+
+  recipe["color"]["r"] = (float)(rand() % 256);
+  recipe["color"]["g"] = (float)(rand() % 256);
+  recipe["color"]["b"] = (float)(rand() % 256);
+  recipe["color"]["a"] = 255;
+
+  recipe["mass"] = 10.f;
+  recipe["inertia"] = 10.f;
+  recipe["position"]["x"] = (float)(rand() % spread_max);
+  recipe["position"]["y"] = (float)(rand() % spread_max);
+  recipe["position"]["z"] = (float)(rand() % spread_max);
+  recipe["rotation"]["yaw"] = 0.f;
+  recipe["rotation"]["pitch"] = 0.f;
+  recipe["rotation"]["roll"] = 1.f;
+
+  return recipe;
+}
+
 
 // Spawner
 void ProgramManager::spawnObject(json recipe) {
