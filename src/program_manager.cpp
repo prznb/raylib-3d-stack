@@ -40,6 +40,15 @@ void ProgramManager::loadTestNRandomCylinders(int n)
 
 }
 
+void ProgramManager::loadTestVehicle()
+{
+  json recipe_ground = recipeGroundDefault();
+  spawnObject(recipe_ground);
+
+  json recipe_vehicle = recipeVehicleAmCar();
+  spawnObject(recipe_vehicle);
+}
+
 
 void ProgramManager::registerRecipe(json recipe) { _recipes.push_back(recipe); }
 
@@ -144,6 +153,19 @@ json ProgramManager::recipeCylinderRandom(int h_max, int radius_max, int spread_
   return recipe;
 }
 
+json ProgramManager::recipeVehicleAmCar()
+{
+  json recipe;
+  recipe["type"] = "car";
+
+  recipe["path"]["dir"] = "am-mus-01";
+  recipe["path"]["model_body"] = "67camaroNoWheels.fbx";
+  recipe["path"]["model_wheel_front"] = "frontWheel.fbx";
+  recipe["path"]["model_wheel_rear"] = "frontWheel.fbx";
+  recipe["path"]["texture"] = "Green.png";
+
+  return recipe;
+}
 
 // Spawner
 void ProgramManager::spawnObject(json recipe) {

@@ -69,6 +69,10 @@ void World::addObject(nlohmann::json &obj_params) {
     colShape = new btCylinderShape(dim);
   }
 
+  if(obj_params["type"] == "car")
+  {
+  }
+
   collisionShapes.push_back(colShape);
 
   /// Create Dynamic Objects

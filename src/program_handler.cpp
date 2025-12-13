@@ -11,9 +11,10 @@ void ProgramHandler::run()
 {  
   //_m.loadTestNRandomCubesAndSpheres(100);
   //_m.loadTestNRandomCubes(100);
-  _m.loadTestNRandomCylinders(100);
+  //_m.loadTestNRandomCylinders(100);
   //_m.saveSimulation();
   //_m.loadTestWorldFromSavedFile();
+  _m.loadTestVehicle();
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {
