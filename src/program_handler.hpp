@@ -37,8 +37,13 @@ private:
   physics::World _dw;
   physics::Shaper _s;
   gui::Handler _gh;
+  RenderTexture2D _target;
+  Shader _shader; 
 
   // Management
   ProgramManager _m;
 
+  // Member f
+  void draw();
+  void process();
 };
