@@ -1,18 +1,11 @@
 #pragma once
 
-// Bullet 
-#include "LinearMath/btVector3.h"
-#include "LinearMath/btAlignedObjectArray.h"
-#include "LinearMath/btTransform.h"
+// Vehicle
+#include "BulletDynamics/Vehicle/btRaycastVehicle.h"
+#include "BulletDynamics/Vehicle/btVehicleRaycaster.h"
 
 // Raylib
 #include "raylib.h"
-
-
-// std C++
-#include <memory>
-#include <vector>
-#include <iostream>
 
 // program
 #include "types.hpp"
@@ -28,10 +21,14 @@ struct Shared
   bool debug = true;
 
   // Which subsystem is currently controlling the input
-  InputOwner io = SHAPER;
+  InputOwner io = CAMERA_LOCK;
 
   // Quick lookup
   RendererObjectTransform selected_object_pose;
+  Camera* camera;
+  btRaycastVehicle* vehicle;
+
+  int selected_vehicle = 0;
 
   // Functions
   void verify(){}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shared_state.hpp"
+#include <vector>
 
 namespace gui {
 class Handler {
@@ -8,11 +9,10 @@ class Handler {
   float _bottom_panel_height; 
   float _bottom_panel_item_width = 300;
 
-  Vector3 _current_player_orientation = {0.f, 0.f, 0.f};
 
 public:
   void process(Shared &state);
-
   void display(Shared &state);
+
 };
 } // namespace gui

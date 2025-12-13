@@ -1,4 +1,6 @@
 #pragma once
+#include "BulletDynamics/Vehicle/btVehicleRaycaster.h"
+#include "BulletDynamics/Vehicle/btWheelInfo.h"
 #include "btBulletDynamicsCommon.h"
 #include "physics_shaper.hpp"
 #include "shared_state.hpp"
@@ -18,22 +20,23 @@ public:
   void addObject(nlohmann::json& obj_params);
   void setup(Shared &state);
   void process(Shared &state, const ExternalFT& eft);
+  void save();
 
-  const std::vector<RendererObjectTransform>& passover();
-
-  void save() 
-  {
-    // From the SDK manual:
-    btDefaultSerializer* serializer = new btDefaultSerializer();
-    this->dynamicsWorld->serialize(serializer);
-    FILE* file = fopen("testFile.bullet","wb");
-    fwrite(serializer->getBufferPointer(),serializer->getCurrentBufferSize(),1, file);
-    fclose(file);
-  }
+  RendererObjectRepresentations& next();
+ 
 
 private:
   // Internal member functions
   void translateObjectTransforms(Shared& state);
+  void translateAdditionalTransforms(Shared& state);
+  void applyVehicleControls(const ExternalFT& eft);
+
+  // Utils
+  Vector3 convertVec3(const btVector3& bt_vec3);
+  RendererObjectTransform convertWheelInfo(const btWheelInfo& bt_winfo);
+  
+  // Interfaces
+  void vehicleSetup(btRigidBody* body, nlohmann::json& obj_params);
 
   // Bullet Physics World
   btDefaultCollisionConfiguration *collisionConfiguration;
@@ -44,7 +47,9 @@ private:
   btAlignedObjectArray<btCollisionShape *> collisionShapes;
 
   // Compat
-  std::vector<RendererObjectTransform> renderer_object_transforms;
+  RendererObjectRepresentations renderer_object_representations;
+  // Comm/Internal
+  std::vector<std::pair<int, btRaycastVehicle *>> vehicle_interfaces;
 
 };
 } // namespace physics

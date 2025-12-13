@@ -13,6 +13,7 @@ namespace renderer {
 class Scene 
 {
   std::vector<std::unique_ptr<renderer::Object>> _objects;
+  ObjectFactory _generator;
 
 public:
   Scene() {};
@@ -22,7 +23,7 @@ public:
 
   void setup(Shared& state);
 
-  void process(Shared &state, const std::vector<RendererObjectTransform>& updated_poses);
+  void process(Shared &state, RendererObjectRepresentations& updated_poses);
 
   void display(Shared& state);
 };

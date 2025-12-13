@@ -1,19 +1,32 @@
 #include "camera_handler.hpp"
+#include "raylib.h"
+#include "shared_state.hpp"
+#include "types.hpp"
 
 CameraHandler::CameraHandler() {
-  _camera.position = (Vector3){0.0f, 2.0f, 100.0f}; // Camera position
-  _camera.target = (Vector3){0.0f, 2.0f, 0.0f};   // Camera looking at point
-  _camera.up =
-      (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation towards target)
-  _camera.fovy = 60.0f;            // Camera field-of-view Y
+  _camera.position = {3.0f, 2.0f, 6.0f}; // Camera position
+  
+  _camera.target = {-1.f, -21.f, -34.f};   // Camera looking at point
+  _camera.up = (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation towards target)
+  _camera.fovy = 60.0f;                             // Camera field-of-view Y
   _camera.projection = CAMERA_PERSPECTIVE;
-
   _slin = 1.0f;
   _sang = 3.0f;
 }
 
+void CameraHandler::setup(Shared& state)
+{
+  // getCamera returs a reference, we want a ptr
+  state.camera = &this->_camera;
+}
+
 void CameraHandler::process(Shared &state) {
-  if (state.io == CAMERA) {
+  if(state.io == CAMERA_LOCK)
+  {
+    return;
+  }
+  else if (state.io == CAMERA) 
+  {
     // Coodinates in local camera frame
     float dx, dy, dz;
     float dpsi, dtheta, dphi;

@@ -33,7 +33,7 @@ public:
   Shaper();
 
   void process(Shared &state);
-  const ExternalFT& passover();
+  const ExternalFT& next();
 
 
 };

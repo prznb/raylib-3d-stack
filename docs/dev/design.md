@@ -6,7 +6,7 @@
     * [x] spheres
     * [ ] ~capsules~ Nah
 * [ ] ~(Physics) Object inertia inference from shape and mass~ Why?
-* [ ] Save and load mesh configuration to the scene from HDD files
+* [x] Save and load mesh configuration to the scene from HDD files
 * [ ] Program modes:
     * [ ] *EDIT* - place actors on the screen
     * [ ] *RUN* - runs the simulation

@@ -104,8 +104,8 @@ $(buildDir)/%.o: src/%.cpp Makefile
 	$(CXX) -MMD -MP -c $(compileFlags) $< -o $@ $(CXXFLAGS)
 
 copy_assets:
-# mkdir -p $(buildDir)/$(assetsDir)
-# cp -r $(assetsDir)/* $(buildDir)/$(assetsDir)
+	mkdir -p $(buildDir)/$(assetsDir)
+	cp -r $(assetsDir)/* $(buildDir)/$(assetsDir)
 
 # Run the executable
 execute:
