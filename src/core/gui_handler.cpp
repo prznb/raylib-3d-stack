@@ -1,4 +1,5 @@
 #include "shared_state.hpp"
+#include <utility>
 #define RAYGUI_IMPLEMENTATION
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "gui_handler.hpp"
@@ -16,7 +17,7 @@ void gui::Handler::display(Shared &state) {
   DrawFPS(0, 0);
 
   // Draw canvas
-  /*
+  
   _bottom_panel_height = GetScreenHeight() - _offset_panel_height;
   DrawLine(0, _bottom_panel_height, GetScreenWidth(), _bottom_panel_height,
            GRAY);
@@ -41,38 +42,103 @@ void gui::Handler::display(Shared &state) {
 
   GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
                           _offset_panel_height - LOWER_LIM_Y},
-              "Actor Params");
+              "Camera Params");
   
   cursor_y += cursor_y_increment;
   cursor_x += cursor_x_increment;
 
   DrawText(TextFormat("Position: X = %0.f, Y = %0.f, Z = %0.f",
-                      state.selected_object_pose.wf_translation.x,
-                      state.selected_object_pose.wf_translation.y,
-                      state.selected_object_pose.wf_translation.y),
+                      state.camera->position.x,
+                      state.camera->position.y,
+                      state.camera->position.z),
            cursor_x, cursor_y, TXT_SIZE, DARKBLUE);
 
   cursor_y += cursor_y_increment;
 
+    DrawText(TextFormat("Target: X = %0.f, Y = %0.f, Z = %0.f",
+                      state.camera->target.x,
+                      state.camera->target.y,
+                      state.camera->target.z),
+           cursor_x, cursor_y, TXT_SIZE, DARKBLUE);
   
-  DrawText(TextFormat("Applied Forces: X = %0.f, Y = %0.f, Z = %0.f",
-                      state.external_object_forces.getX(),
-                      state.external_object_forces.getY(),
-                      state.external_object_forces.getZ()),
-           cursor_x, cursor_y, TXT_SIZE, BLUE);
+  // New panel - Vehicle tuning
+  cursor_y =
+      _bottom_panel_height +
+      UPPER_LIM_Y; // defines current position of the panel item to draw (ROW)
+ 
+  cursor_x += _bottom_panel_item_width;
+  
+  GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
+                          _offset_panel_height - LOWER_LIM_Y},"Vehicle Params");
+  
+  // get info from one wheel then assign to the other ones
+  btWheelInfo &wheel= state.vehicle->getWheelInfo(0);
+
+  float suspensionStiffness       = wheel.m_suspensionStiffness;
+  float wheelsDampingRelaxation   = wheel.m_wheelsDampingRelaxation;      
+  float wheelsDampingCompression  = wheel.m_wheelsDampingCompression;    
+  float frictionSlip              = wheel.m_frictionSlip;
+  float rollInfluence             = wheel.m_rollInfluence; 
+
 
   cursor_y += cursor_y_increment;
-  DrawText(TextFormat("Rotation: OX = %0.2f, OY = %0.2f, OZ = %0.2f",
-                      state.getCurrentPlayerRotationEuler().x,
-                      state.getCurrentPlayerRotationEuler().y,
-                      state.getCurrentPlayerRotationEuler().z),
-           cursor_x, cursor_y, TXT_SIZE, RED);
+  cursor_x += cursor_x_increment;
 
+  DrawText(TextFormat("Suspension Stiffness: %0.2f", suspensionStiffness),
+           cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
+  cursor_y += 0.5*cursor_y_increment;
+  Rectangle bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
+  const char* min = "0";
+  const char* max = "50";
+  GuiSlider(bounds,min, max, &suspensionStiffness , 0.f, 50.f);
+  
+
+  // Damping relaxation
   cursor_y += cursor_y_increment;
-  DrawText(TextFormat("Applied Torque: OX = %0.2f, OY = %0.2f, OZ = %0.2f",
-                      state.external_object_torques.getX(),
-                      state.external_object_torques.getY(),
-                      state.external_object_torques.getZ()),
-           cursor_x, cursor_y, TXT_SIZE, RED);
-  */
+  DrawText(TextFormat("Damping Relaxation: %0.2f", wheelsDampingRelaxation),
+           cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
+  cursor_y += 0.5*cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
+  GuiSlider(bounds,min, max, &wheelsDampingRelaxation , 0.f, 50.f);
+  
+  // Damping compression
+  cursor_y += cursor_y_increment;
+  DrawText(TextFormat("Damping Compression: %0.2f", wheelsDampingCompression),
+           cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
+  cursor_y += 0.5*cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
+  GuiSlider(bounds,min, max, &wheelsDampingCompression , 0.f, 50.f);
+  
+  // Friction slip
+  cursor_y += cursor_y_increment;
+  DrawText(TextFormat("Friction Slip: %0.2f", frictionSlip),
+           cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
+  cursor_y += 0.5*cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
+  min = "0";
+  max = "500";
+  GuiSlider(bounds,min, max, &frictionSlip , 0.f, 500.f);
+  
+  // Roll influence
+  cursor_y += cursor_y_increment;
+  DrawText(TextFormat("Roll Influence: %0.2f", rollInfluence),
+           cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
+  cursor_y += 0.5*cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
+  min = "0";
+  max = "1";
+  GuiSlider(bounds,min, max, &rollInfluence , 0.f, 1.f);
+  
+  
+  // update tuning
+  for (int i = 0; i < state.vehicle->getNumWheels(); i++) {
+    btWheelInfo &wheel = state.vehicle->getWheelInfo(i);
+    wheel.m_suspensionStiffness = suspensionStiffness;
+    wheel.m_wheelsDampingRelaxation = wheelsDampingRelaxation;
+    wheel.m_wheelsDampingCompression = wheelsDampingCompression;
+    wheel.m_frictionSlip = frictionSlip;
+    wheel.m_rollInfluence = rollInfluence;
+  }
+
+
 }

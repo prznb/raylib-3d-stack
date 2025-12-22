@@ -50,6 +50,9 @@ public:
     file.close();
   }
 
+  void loadTestVehicle();
+
+
 private:
   /* Recipes */
   void registerRecipe(json recipe);
@@ -57,6 +60,8 @@ private:
   json recipeCubeRandom(int size_max = 10, int spread_max = 100);
   json recipeSphereRandom(int size_max = 10, int spread_max = 100);
   json recipeCylinderRandom(int h_max = 10, int radius_max = 5, int spread_max = 100);
+  json recipeSphereTiny(int pos_x=0, int pos_y = 0, int pos_z = 0);
+  json recipeDebugVehicle();
 
   // Spawner
   void spawnObject(json recipe);

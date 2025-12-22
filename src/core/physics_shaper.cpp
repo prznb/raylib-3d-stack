@@ -71,7 +71,7 @@ void Shaper::process(Shared &state) {
   // state.external_object_torques = _torque_direction * _torque;
 }
 
-const ExternalFT& Shaper::passover()
+const ExternalFT& Shaper::next()
 {
   return _eft;
 }

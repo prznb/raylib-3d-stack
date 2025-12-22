@@ -2,22 +2,23 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "shared_state.hpp"
+#include "types.hpp"
 #include <cstdlib>
 
 
 namespace renderer {
 
 void Scene::addObject(nlohmann::json& obj_params) {
-  auto new_object = std::make_unique<Object>(obj_params);
+  auto new_object = _generator.create(obj_params);
   _objects.push_back(std::move(new_object));
 }
 
 void Scene::setup(Shared &state) {}
 
-void Scene::process(Shared &state, const std::vector<RendererObjectTransform>& updated_poses) {
+void Scene::process(Shared &state, RendererObjectRepresentations& updated_poses) 
+{
   for (int i = 0; i < _objects.size(); ++i) {
-    // assign updated transforms
-    _objects[i]->process(updated_poses[i]);
+    _objects[i]->process(i, updated_poses);
   }
 }
 
@@ -27,7 +28,7 @@ void Scene::display(Shared &state) {
   }
 
   if (state.debug) {
-    DrawGrid(250, 2);
+    DrawGrid(250, 1);
   }
 }
 
