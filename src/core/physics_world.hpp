@@ -11,6 +11,7 @@
 #include <nlohmann/json.hpp>
 
 namespace physics {
+
 class World {
 
 public:

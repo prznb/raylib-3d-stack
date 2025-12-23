@@ -54,7 +54,7 @@ void Object::display(Shared &state) {
 Vehicle::Vehicle(json &obj_params) : Object(obj_params) {
   if (obj_params["model"] == "debug_m3") 
   {
-    Model allModelMeshes = LoadModel("assets/_extras/m3.glb");
+    Model allModelMeshes = LoadModel("assets/models/_extras/m3.glb");
     Mesh chassis = allModelMeshes.meshes[0];
     _model = LoadModelFromMesh(chassis); // assign base model
 
@@ -67,6 +67,7 @@ Vehicle::Vehicle(json &obj_params) : Object(obj_params) {
 
     _model_rotation_offset = {-PI/2.f, 0.f, 0.f};
     _model_translation_offset = {0.f ,-0.45f*(float)obj_params["dimensions"]["chassis"]["height"], -0.1f};
+    //_model_translation_offset = Vector3Zero();
   } 
   else {
     Mesh m = GenMeshCube(obj_params["dimensions"]["chassis"]["width"],
@@ -86,6 +87,11 @@ void Vehicle::process(int scene_index, RendererObjectRepresentations &rot) {
 
 void Vehicle::display(Shared &state) 
 {
+  // proper offset: 
+  // Get orientation and proper "down" direction in the chassis body frame. 
+  // Subtract _model_translation_offset from chassis body "down", in chassis frame.
+  // Translate updated position to WS
+
   // base model
   _pose.wf_rotation = Vector3Add(_pose.wf_rotation, _model_rotation_offset);
   _model.transform = MatrixRotateZYX(_pose.wf_rotation);

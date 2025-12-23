@@ -1,4 +1,4 @@
-#pragma once
+
 #include "physics_world.hpp"
 #include "BulletCollision/CollisionShapes/btCylinderShape.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
@@ -156,13 +156,13 @@ void World::vehicleSetup(btRigidBody *body, nlohmann::json &obj_params) {
   btScalar track = obj_params["dimensions"]["wheels"]["track"];
 
   btVector3 wheelDirectionCS0 = {0, -1, 0};             // down
-  btVector3 wheelAxleCSLeft = {-wheelbase / 2.f, 0, 0}; // left
-  btVector3 wheelAxleCSRight = {wheelbase / 2.f, 0, 0}; // right
+  btVector3 wheelAxleCSLeft = {-1.f, 0.f, 0}; // left
+  btVector3 wheelAxleCSRight = {1.f, 0.f, 0}; // right
 
   btVector3 connectionPointCS0FL = {-track / 2.f, 0.f, wheelbase / 2.f};
-  btVector3 connectionPointCS0FR = {track / 2.f, 0.f, wheelbase / 2.f};
+  btVector3 connectionPointCS0FR = {track / 2.f , 0.f, wheelbase / 2.f};
   btVector3 connectionPointCS0RL = {-track / 2.f, 0.f, -wheelbase / 2.f};
-  btVector3 connectionPointCS0RR = {track / 2.f, 0.f, -wheelbase / 2.f};
+  btVector3 connectionPointCS0RR = {track / 2.f , 0.f, -wheelbase / 2.f};
 
   // FL
   vehicle->addWheel(connectionPointCS0FL, wheelDirectionCS0, wheelAxleCSLeft,
@@ -180,11 +180,13 @@ void World::vehicleSetup(btRigidBody *body, nlohmann::json &obj_params) {
   // tuning
   for (int i = 0; i < vehicle->getNumWheels(); i++) {
     btWheelInfo &wheel = vehicle->getWheelInfo(i);
-    wheel.m_suspensionStiffness = 20.35f;
+    wheel.m_suspensionStiffness = 25.35f;
     wheel.m_wheelsDampingRelaxation = 50.0f;
-    wheel.m_wheelsDampingCompression = 30.0f;
+    wheel.m_wheelsDampingCompression = 20.0f;
     wheel.m_frictionSlip = 500.f;
     wheel.m_rollInfluence = 0.0f;
+    wheel.m_maxSuspensionTravelCm = 9.f;
+    //wheel.m_maxSuspensionForce = 1E3;
   }
 
   // Add tracker: most recently added obj (vehicle collider), and the interface
@@ -294,10 +296,10 @@ Vector3 World::convertVec3(const btVector3 &bt_vec3) {
 
 RendererObjectTransform World::convertWheelInfo(const btWheelInfo &bt_winfo) {
   RendererObjectTransform rot;
+  // bt_winfo.m_wheelsRadius * bt_winfo.m_raycastInfo.m_contactNormalWS-
+  // bt_winfo.m_raycastInfo.m_hardPointWS - bt_winfo.getSuspensionRestLength() * bt_winfo.m_raycastInfo.m_contactNormalWS;
 
-  btVector3 tireCenterPoint =
-      bt_winfo.m_raycastInfo.m_contactPointWS +
-      bt_winfo.m_wheelsRadius * bt_winfo.m_raycastInfo.m_contactNormalWS;
+  btVector3 tireCenterPoint = bt_winfo.m_worldTransform.getOrigin();
   rot.wf_translation =
       convertVec3(tireCenterPoint); //.m_worldTransform.getOrigin());
   bt_winfo.m_worldTransform.getRotation().getEulerZYX(

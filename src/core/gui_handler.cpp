@@ -79,6 +79,7 @@ void gui::Handler::display(Shared &state) {
   float wheelsDampingCompression  = wheel.m_wheelsDampingCompression;    
   float frictionSlip              = wheel.m_frictionSlip;
   float rollInfluence             = wheel.m_rollInfluence; 
+  float maxSuspensionTravelCm     = wheel.m_maxSuspensionTravelCm;
 
 
   cursor_y += cursor_y_increment;
@@ -93,13 +94,14 @@ void gui::Handler::display(Shared &state) {
   GuiSlider(bounds,min, max, &suspensionStiffness , 0.f, 50.f);
   
 
+  max = "500";
   // Damping relaxation
   cursor_y += cursor_y_increment;
   DrawText(TextFormat("Damping Relaxation: %0.2f", wheelsDampingRelaxation),
            cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
   cursor_y += 0.5*cursor_y_increment;
   bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
-  GuiSlider(bounds,min, max, &wheelsDampingRelaxation , 0.f, 50.f);
+  GuiSlider(bounds,min, max, &wheelsDampingRelaxation , 0.f, 500.f);
   
   // Damping compression
   cursor_y += cursor_y_increment;
@@ -107,7 +109,7 @@ void gui::Handler::display(Shared &state) {
            cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
   cursor_y += 0.5*cursor_y_increment;
   bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
-  GuiSlider(bounds,min, max, &wheelsDampingCompression , 0.f, 50.f);
+  GuiSlider(bounds,min, max, &wheelsDampingCompression , 0.f, 500.f);
   
   // Friction slip
   cursor_y += cursor_y_increment;
@@ -119,15 +121,15 @@ void gui::Handler::display(Shared &state) {
   max = "500";
   GuiSlider(bounds,min, max, &frictionSlip , 0.f, 500.f);
   
-  // Roll influence
+  // Suspension Force
   cursor_y += cursor_y_increment;
-  DrawText(TextFormat("Roll Influence: %0.2f", rollInfluence),
+  DrawText(TextFormat("Suspension Travel Max (cm): %0.2f", maxSuspensionTravelCm),
            cursor_x, cursor_y, TXT_SIZE, DARKGREEN);
   cursor_y += 0.5*cursor_y_increment;
   bounds = {cursor_x, cursor_y, _bottom_panel_item_width*0.7f, cursor_y_increment};
   min = "0";
-  max = "1";
-  GuiSlider(bounds,min, max, &rollInfluence , 0.f, 1.f);
+  max = "50";
+  GuiSlider(bounds,min, max, &maxSuspensionTravelCm , 0.f, 50);
   
   
   // update tuning
@@ -138,6 +140,7 @@ void gui::Handler::display(Shared &state) {
     wheel.m_wheelsDampingCompression = wheelsDampingCompression;
     wheel.m_frictionSlip = frictionSlip;
     wheel.m_rollInfluence = rollInfluence;
+    wheel.m_maxSuspensionTravelCm = maxSuspensionTravelCm;
   }
 
 
