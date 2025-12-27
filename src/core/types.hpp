@@ -15,20 +15,26 @@ typedef enum Event{
 
 
 // Input
-class InputAxis
+class AnalogAxis
 {
   float _val;
   const float _LIMIT_UPPER = 1.0f;
   const float _LIMIT_LOWER = -1.0f;
-  GamepadAxis _which;
+  //GamepadAxis _which;
 
   public:
-  InputAxis(GamepadAxis reference_axis)
+  AnalogAxis()
   {
-    _which = reference_axis;
+    //_which = reference_axis;
+  }
+  AnalogAxis operator=(float fval)
+  {
+    AnalogAxis ret;
+    ret.set(fval);
+    return ret;
   }
 
-  float get()
+  float get() const
   {
     return _val;
   }
@@ -42,21 +48,27 @@ class InputAxis
 };
 
 
-typedef enum InputOwner{
+typedef enum CameraView{
   CAMERA = 0,
   CAMERA_LOCK,
   PLAYER, 
   SHAPER
-}InputOwner;
+}CameraView;
 
 typedef struct InputStorage{
   // Axes 
-  InputAxis lin_X;
-  InputAxis lin_Y;
-  InputAxis lin_Z;
-  InputAxis rot_X;
-  InputAxis rot_Y;
-  InputAxis rot_Z; 
+  float lin_x;
+  float lin_y;
+  float lin_z;
+  float rot_x;
+  float rot_y;
+  float rot_z; 
+
+  bool kbd_c; 
+  bool kbd_v; 
+  bool kbd_b;
+
+  float mou_s; 
 
 }InputStorage;
 

@@ -20,6 +20,8 @@ void Scene::process(Shared &state, RendererObjectRepresentations& updated_poses)
   for (int i = 0; i < _objects.size(); ++i) {
     _objects[i]->process(i, updated_poses);
   }
+
+  state.selected_object_pose = _objects[state.selected_vehicle_body_idx]->getPose();
 }
 
 void Scene::display(Shared &state) {

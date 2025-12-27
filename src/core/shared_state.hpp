@@ -21,7 +21,10 @@ struct Shared
   bool debug = true;
 
   // Which subsystem is currently controlling the input
-  InputOwner io = CAMERA_LOCK;
+  const CameraView* camera_view;
+
+  // Input capture lookup
+  const InputStorage* is;
 
   // Quick lookup
   RendererObjectTransform selected_object_pose;
@@ -29,6 +32,7 @@ struct Shared
   btRaycastVehicle* vehicle;
 
   int selected_vehicle = 0;
+  int selected_vehicle_body_idx = 1;
 
   // Functions
   void verify(){}

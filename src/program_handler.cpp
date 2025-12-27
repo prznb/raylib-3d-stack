@@ -13,6 +13,7 @@ void ProgramHandler::run()
   // Setup
   _cc.setup(_ss);
   _dw.setup(_ss);
+  _ieh.setup(_ss);
 
   while (!_w.ShouldClose()) // Detect window close button or ESC key
   {

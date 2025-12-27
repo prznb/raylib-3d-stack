@@ -18,45 +18,64 @@ void CameraHandler::setup(Shared& state)
 {
   // getCamera returs a reference, we want a ptr
   state.camera = &this->_camera;
+  state.camera_view = &this->_camera_view;
 }
 
-void CameraHandler::process(Shared &state) {
-  if(state.io == CAMERA_LOCK)
+void CameraHandler::whichView(Shared& state)
+{
+  if(state.is->kbd_c) 
+  {
+    _camera_view = CAMERA;
+  }
+  else if(state.is->kbd_v) 
+  {
+    _camera_view = CAMERA_LOCK;
+  }
+  else if (state.is->kbd_b)
+  {
+    _camera_view = PLAYER;
+  }
+  else 
+  {
+    //_camera_view = _camera_view;
+  }
+}
+
+void CameraHandler::process(Shared &state)
+{
+  whichView(state);
+
+  if(_camera_view == CAMERA_LOCK)
   {
     return;
   }
-  else if (state.io == CAMERA) 
+  else if (_camera_view == CAMERA) 
   {
     // Coodinates in local camera frame
     float dx, dy, dz;
     float dpsi, dtheta, dphi;
 
-    dx = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S)) * _slin;
-    dy = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A)) * _slin;
-    dz = (IsKeyDown(KEY_LEFT_SHIFT) - IsKeyDown(KEY_LEFT_CONTROL)) * _slin;
+    dx = state.is->lin_x * _slin;
+    dy = state.is->lin_y * _slin;
+    dz = state.is->lin_z * _slin;
 
-    dpsi = (IsKeyDown(KEY_RIGHT) - IsKeyDown(KEY_LEFT) + GetMouseDelta().x) *
-           _sang;
-    dtheta =
-        (IsKeyDown(KEY_DOWN) - IsKeyDown(KEY_UP) + GetMouseDelta().y) * _sang;
-    dphi = (IsKeyDown(KEY_E) - IsKeyDown(KEY_Q)) * _sang;
+    dpsi = state.is->rot_x * _sang;
+    dtheta = state.is->rot_y * _sang;
+    dphi = state.is->rot_z * _sang;
 
     UpdateCameraPro(&_camera, (Vector3){dx, dy, dz},
                     (Vector3){dpsi, dtheta, dphi},
-                    GetMouseWheelMove() * 2.0f); // Move to target (zoom)
+                     state.is->mou_s* 2.0f); // Move to target (zoom)
   }
 
-  else if (state.io == PLAYER || state.io == SHAPER) {
-    // World frame coordinates
+  else if (_camera_view == PLAYER) {
     float x, y, z;
-
     x = state.selected_object_pose.wf_translation.x;
-    y = state.selected_object_pose.wf_translation.y - _cposoff_y; // - test_offset;
+    y = state.selected_object_pose.wf_translation.y - _cposoff_y;
     z = state.selected_object_pose.wf_translation.z - _cposoff_z;
 
     _camera.position = Vector3{x, y, z};
     _camera.target = state.selected_object_pose.wf_translation;
-    // _camera.up ??
   }
 } // process
 

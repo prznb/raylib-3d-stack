@@ -4,7 +4,6 @@
 #include "shared_state.hpp"
 #include "types.hpp"
 #include <cstdlib>
-#include <filesystem>
 #include <memory>
 
 namespace renderer {
