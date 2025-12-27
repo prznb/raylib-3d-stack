@@ -27,7 +27,7 @@ struct Shared
   const InputStorage* is;
 
   // Quick lookup
-  RendererObjectTransform selected_object_pose;
+  RendererObjectTransform* selected_object_pose;
   Camera* camera;
   btRaycastVehicle* vehicle;
 

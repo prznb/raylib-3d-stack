@@ -47,14 +47,6 @@ void ProgramManager::loadTestVehicle()
 
   json recipe_vehicle = recipeDebugVehicle();
   spawnObject(recipe_vehicle);
-
-
-  for(int i = 10; i < 1000; i++)
-  {
-    json rst = recipeSphereTiny(0, i, 0);
-    spawnObject(rst);
-  }
-
 }
 
 

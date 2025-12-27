@@ -24,13 +24,12 @@ public:
   void save();
 
   RendererObjectRepresentations& next();
- 
 
 private:
   // Internal member functions
   void translateObjectTransforms(Shared& state);
   void translateAdditionalTransforms(Shared& state);
-  void applyVehicleControls(const ExternalFT& eft);
+  void applyVehicleControls(Shared& state, const ExternalFT& eft);
 
   // Utils
   Vector3 convertVec3(const btVector3& bt_vec3);

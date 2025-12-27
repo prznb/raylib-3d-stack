@@ -1,4 +1,5 @@
 #pragma once 
+#include "LinearMath/btScalar.h"
 #include "raylib.h"
 #include <unordered_map>
 #include <vector>
@@ -84,10 +85,19 @@ typedef struct RendererObjectRepresentations
   std::unordered_map<int, std::vector<RendererObjectTransform>> subtransforms; // Collection of subsequent transforms for compound objects
 }RendererObjectRepresentations;
 
+typedef struct VehicleControls{
+  btScalar setpoint_engine_force;
+  btScalar setpoint_steering_angle;
+}VehicleControls;
+
 typedef struct ExternalFT
 {
   std::vector<std::pair<int, btVector3>> external_object_forces; 
   std::vector<std::pair<int, btVector3>> external_object_torques;
-  std::vector<std::pair<int, btVector3>> kinematic_control_direction;
+  
+  // Vehicles
+  std::vector<VehicleControls> vehicle_controls;
 } ExternalFT;
+
+
 

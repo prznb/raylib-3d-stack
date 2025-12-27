@@ -74,7 +74,7 @@ void gui::Handler::display(Shared &state) {
 
   GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
                           _offset_panel_height - LOWER_LIM_Y},
-              "Vehicle Params");
+              "Suspension Params");
 
   // get info from one wheel then assign to the other ones
   btWheelInfo &wheel = state.vehicle->getWheelInfo(0);
@@ -150,4 +150,40 @@ void gui::Handler::display(Shared &state) {
     wheel.m_rollInfluence = rollInfluence;
     wheel.m_maxSuspensionTravelCm = maxSuspensionTravelCm;
   }
+
+  cursor_y =
+      _bottom_panel_height +
+      UPPER_LIM_Y; // defines current position of the panel item to draw (ROW)
+
+  cursor_x += _bottom_panel_item_width;
+
+  GuiGroupBox((Rectangle){cursor_x, cursor_y, _bottom_panel_item_width,
+                          _offset_panel_height - LOWER_LIM_Y}, "Vehicle Controls/Dynamics");
+  
+  cursor_x += 2*cursor_x_increment;
+
+  // Steering Angle
+  cursor_y += cursor_y_increment;
+  float curr_steering_value = -state.vehicle->getSteeringValue(1);
+  DrawText(TextFormat("Steering Angle: %0.2f [rad]", curr_steering_value),
+           cursor_x, cursor_y, TXT_SIZE, RED);
+  cursor_y += 0.5 * cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width * 0.7f,
+                      cursor_y_increment};
+  min = "-0.45";
+  max = "0.45";
+  GuiSlider(bounds, min, max, &curr_steering_value, -0.45f, 0.45f);
+  
+  // Engine Effective Power
+  cursor_y += cursor_y_increment;
+  float curr_speed = abs(state.vehicle->getCurrentSpeedKmHour());
+  DrawText(TextFormat("Speed: %0.2f [km/h]", curr_speed),
+           cursor_x, cursor_y, TXT_SIZE, RED);
+  cursor_y += 0.5 * cursor_y_increment;
+  bounds = {cursor_x, cursor_y, _bottom_panel_item_width * 0.7f,
+                      cursor_y_increment};
+  min = "0.0";
+  max = "12.0";
+  GuiSlider(bounds, min, max, &curr_speed, 0.f, 10.f);
+
 }

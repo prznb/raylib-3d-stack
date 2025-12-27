@@ -70,12 +70,12 @@ void CameraHandler::process(Shared &state)
 
   else if (_camera_view == PLAYER) {
     float x, y, z;
-    x = state.selected_object_pose.wf_translation.x;
-    y = state.selected_object_pose.wf_translation.y - _cposoff_y;
-    z = state.selected_object_pose.wf_translation.z - _cposoff_z;
+    x = state.selected_object_pose->wf_translation.x;
+    y = state.selected_object_pose->wf_translation.y - _cposoff_y;
+    z = state.selected_object_pose->wf_translation.z - _cposoff_z;
 
     _camera.position = Vector3{x, y, z};
-    _camera.target = state.selected_object_pose.wf_translation;
+    _camera.target = state.selected_object_pose->wf_translation;
   }
 } // process
 

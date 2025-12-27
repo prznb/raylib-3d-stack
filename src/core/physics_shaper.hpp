@@ -5,24 +5,39 @@
 #include "types.hpp"
 #include <memory>
 
-/** @brief Apply external forces and torques to the objects
- *
- * ref:
- *
- * @todo Fix it - it should be handled by the bullet control interfaces instead
- */
+
 namespace physics {
+
+class DynamicsFirstOrder {
+  float _y, _y_prev;
+  float _a;
+
+public:
+  DynamicsFirstOrder(float a) {
+    _a = a;
+    _y_prev = 0.f;
+  }
+
+  float step(float x) {
+    _y = _a * x + (1.f - _a) * _y_prev;
+    _y_prev = _y;
+    return _y;
+  }
+};
 
 class Shaper {
   ExternalFT _eft;
-  
+
+  DynamicsFirstOrder _steering_dynamics;
+  DynamicsFirstOrder _acceleration_dynamics;
+
+  float responseFirstOrderSystem(float setpoint, float current);
+
 public:
   Shaper();
 
   void process(Shared &state);
-  const ExternalFT& next();
-
-
+  const ExternalFT &next();
 };
 
 } // namespace physics

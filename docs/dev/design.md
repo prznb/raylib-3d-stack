@@ -1,22 +1,27 @@
 ## Requirements for 0.0.1
 
-* [ ] (Abstract) Object support:
+* [x] (Abstract) Object support:
     * [x] cubes
     * [x] cylinders
     * [x] spheres
-    * [ ] ~capsules~ Nah
-* [ ] ~(Physics) Object inertia inference from shape and mass~ Why?
 * [x] Save and load mesh configuration to the scene from HDD files
+* [ ] Major refactoring
+
+## Requirements for 0.0.1
+* [x] Ground vehicle dynamics support
+* [ ] Ground vehicle controls
+* [ ] Input handling refactoring
+* [ ] Major UI overhaul
+
+## Requirements for 0.0.3
+
+* [ ] Spawn and track joints (constraints)
 * [ ] Program modes:
     * [ ] *EDIT* - place actors on the screen
     * [ ] *RUN* - runs the simulation
 * [ ] GUI: 
     * [ ] Interface for placing objects
     * [ ] Display the number of objects in the world/scene
-
-## Requirements for 0.0.2
-
-* [ ] Spawn and track joints (constraints)
 
 
 ## Dev

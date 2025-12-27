@@ -53,7 +53,11 @@ World::~World() {
 
 void World::setup(Shared &state) 
 {
+  state.selected_vehicle = 0; // TODO: Should be taken from user input or config
+  state.selected_vehicle_body_idx = 1; // TODO: Should be obtain programmatically 
+
   state.vehicle = vehicle_interfaces[state.selected_vehicle].second;
+  state.selected_object_pose = &renderer_object_representations.base_transforms[state.selected_vehicle_body_idx];
 }
 
 void World::addObject(nlohmann::json &obj_params) {
@@ -180,7 +184,7 @@ void World::vehicleSetup(btRigidBody *body, nlohmann::json &obj_params) {
   // tuning
   for (int i = 0; i < vehicle->getNumWheels(); i++) {
     btWheelInfo &wheel = vehicle->getWheelInfo(i);
-    wheel.m_suspensionStiffness = 25.35f;
+    wheel.m_suspensionStiffness = 25.77f;
     wheel.m_wheelsDampingRelaxation = 50.0f;
     wheel.m_wheelsDampingCompression = 20.0f;
     wheel.m_frictionSlip = 500.f;
@@ -205,17 +209,26 @@ void World::vehicleSetup(btRigidBody *body, nlohmann::json &obj_params) {
   }
 }
 
-void World::applyVehicleControls(const ExternalFT &eft) {
-  // vehicle->applyEngineForce(engineForce, wheelIndex);
+void World::applyVehicleControls(Shared& state, const ExternalFT &eft) {
+
+  // Assume RWD
+  // Left wheel +F, right wheel -F; for the same dir.
+  vehicle_interfaces[state.selected_vehicle].second->applyEngineForce(eft.vehicle_controls[state.selected_vehicle].setpoint_engine_force,2);
+  vehicle_interfaces[state.selected_vehicle].second->applyEngineForce(-eft.vehicle_controls[state.selected_vehicle].setpoint_engine_force,3);
+
+  // Steering angle 
+  vehicle_interfaces[state.selected_vehicle].second->setSteeringValue(eft.vehicle_controls[state.selected_vehicle].setpoint_steering_angle, 0);
+  vehicle_interfaces[state.selected_vehicle].second->setSteeringValue(eft.vehicle_controls[state.selected_vehicle].setpoint_steering_angle, 1);
+
+
   // vehicle->setBrake(brakeForce, wheelIndex);
-  // vehicle_interfaces[0].second->setSteeringValue(0.3, 0);
-  // vehicle_interfaces[0].second->setSteeringValue(0.3, 1);
+
   // vehicle_interfaces[0].second->applyEngineForce(3E3, 2);
   // vehicle_interfaces[0].second->applyEngineForce(3E3, 3);
 }
 
 void World::process(Shared &state, const ExternalFT &eft) {
-  applyVehicleControls(eft);
+  applyVehicleControls(state, eft);
   dynamicsWorld->stepSimulation(1.f / 60.f, 10);
   translateObjectTransforms(state);     // all objects
   translateAdditionalTransforms(state); // interfaces and additional

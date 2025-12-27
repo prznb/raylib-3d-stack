@@ -7,12 +7,13 @@ void InputEventHandler::setup(Shared &state)
 }
 
 void InputEventHandler::process(Shared &state) 
-{ 
+{
     capture();
 }
 
 void InputEventHandler::capture() 
 {
+
   _is.lin_x = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
   _is.lin_y = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
   _is.lin_z = (IsKeyDown(KEY_LEFT_SHIFT) - IsKeyDown(KEY_LEFT_CONTROL));
