@@ -1,6 +1,10 @@
 #include "input_event_handler.hpp"
 #include "types.hpp"
 
+InputEventHandler::InputEventHandler()
+{
+}
+
 void InputEventHandler::process(Shared &state) {
   // Evaluate Input Processing Ownership
   if (IsKeyDown(KEY_C)) {

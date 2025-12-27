@@ -8,9 +8,39 @@
 
 using json = nlohmann::json;
 
+// Events
 typedef enum Event{
   OBJECT_ADDED = 0,
 }Event;
+
+
+// Input
+class InputAxis
+{
+  float _val;
+  const float _LIMIT_UPPER = 1.0f;
+  const float _LIMIT_LOWER = -1.0f;
+  GamepadAxis _which;
+
+  public:
+  InputAxis(GamepadAxis reference_axis)
+  {
+    _which = reference_axis;
+  }
+
+  float get()
+  {
+    return _val;
+  }
+
+  void set(float newVal)
+  {
+    if (newVal>_LIMIT_UPPER) _val = 1.0f;
+    else if (newVal<_LIMIT_LOWER) _val = -1.0f;
+    else _val = newVal;
+  } 
+};
+
 
 typedef enum InputOwner{
   CAMERA = 0,
@@ -18,6 +48,18 @@ typedef enum InputOwner{
   PLAYER, 
   SHAPER
 }InputOwner;
+
+typedef struct InputStorage{
+  // Axes 
+  InputAxis lin_X;
+  InputAxis lin_Y;
+  InputAxis lin_Z;
+  InputAxis rot_X;
+  InputAxis rot_Y;
+  InputAxis rot_Z; 
+
+}InputStorage;
+
 
 typedef struct RendererObjectTransform{
     Vector3 wf_translation = {0.f, 0.f, 0.f};    // Translation in world frame
