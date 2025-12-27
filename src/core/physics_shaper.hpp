@@ -15,20 +15,8 @@
 namespace physics {
 
 class Shaper {
-  Vector3 _capture_for_impulse;
-  Vector3 _capture_for_torques;
-
-  btVector3 _impulse_direction;
-  btVector3 _torque_direction;
-
-  float _impulse_force;
-  float _torque;
-
   ExternalFT _eft;
   
-  void captureInput();
-  void zeroAll(Shared &state);
-
 public:
   Shaper();
 
