@@ -21,7 +21,7 @@ struct Shared
   bool debug = true;
 
   // Which subsystem is currently controlling the input
-  const CameraView* camera_view;
+  const InputMode* input_mode;
 
   // Input capture lookup
   const InputStorage* is;

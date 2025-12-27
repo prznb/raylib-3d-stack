@@ -5,7 +5,6 @@
 
 CameraHandler::CameraHandler() {
   _camera.position = {3.0f, 2.0f, 6.0f}; // Camera position
-  
   _camera.target = {-1.f, -21.f, -34.f};   // Camera looking at point
   _camera.up = (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation towards target)
   _camera.fovy = 60.0f;                             // Camera field-of-view Y
@@ -18,26 +17,22 @@ void CameraHandler::setup(Shared& state)
 {
   // getCamera returs a reference, we want a ptr
   state.camera = &this->_camera;
-  state.camera_view = &this->_camera_view;
+  state.input_mode = &this->_input_mode;
 }
 
 void CameraHandler::whichView(Shared& state)
 {
   if(state.is->kbd_c) 
   {
-    _camera_view = CAMERA;
+    _input_mode = CAMERA;
   }
   else if(state.is->kbd_v) 
   {
-    _camera_view = CAMERA_LOCK;
+    _input_mode = CAMERA_LOCK;
   }
   else if (state.is->kbd_b)
   {
-    _camera_view = PLAYER;
-  }
-  else 
-  {
-    //_camera_view = _camera_view;
+    _input_mode = PLAYER;
   }
 }
 
@@ -45,11 +40,11 @@ void CameraHandler::process(Shared &state)
 {
   whichView(state);
 
-  if(_camera_view == CAMERA_LOCK)
+  if(_input_mode == CAMERA_LOCK)
   {
     return;
   }
-  else if (_camera_view == CAMERA) 
+  else if (_input_mode == CAMERA) 
   {
     // Coodinates in local camera frame
     float dx, dy, dz;
@@ -68,7 +63,7 @@ void CameraHandler::process(Shared &state)
                      state.is->mou_s* 2.0f); // Move to target (zoom)
   }
 
-  else if (_camera_view == PLAYER) {
+  else if (_input_mode == PLAYER) {
     float x, y, z;
     x = state.selected_object_pose->wf_translation.x;
     y = state.selected_object_pose->wf_translation.y - _cposoff_y;
@@ -77,6 +72,6 @@ void CameraHandler::process(Shared &state)
     _camera.position = Vector3{x, y, z};
     _camera.target = state.selected_object_pose->wf_translation;
   }
-} // process
+} 
 
 const Camera &CameraHandler::getCamera() { return _camera; }

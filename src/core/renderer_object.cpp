@@ -96,7 +96,7 @@ void Vehicle::display(Shared &state)
   DrawModel(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RAYWHITE);
   
   // chassis extras
-  for(int i = 0; i<5; ++i)
+  for(int i = 0; i<7; ++i)
   {
     _submodels[i].transform = MatrixRotateZYX(_pose.wf_rotation);
     DrawModelWires(_submodels[i],Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RED);

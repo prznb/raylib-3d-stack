@@ -13,7 +13,6 @@ void InputEventHandler::process(Shared &state)
 
 void InputEventHandler::capture() 
 {
-
   _is.lin_x = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
   _is.lin_y = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
   _is.lin_z = (IsKeyDown(KEY_LEFT_SHIFT) - IsKeyDown(KEY_LEFT_CONTROL));
@@ -24,6 +23,7 @@ void InputEventHandler::capture()
   _is.kbd_c = IsKeyDown(KEY_C);
   _is.kbd_v = IsKeyDown(KEY_V);
   _is.kbd_b = IsKeyDown(KEY_B);
+  _is.kbd_space = IsKeyDown(KEY_SPACE);
 
   _is.mou_s = GetMouseWheelMove();
 }

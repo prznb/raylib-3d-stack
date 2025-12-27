@@ -7,7 +7,7 @@
 * [x] Save and load mesh configuration to the scene from HDD files
 * [ ] Major refactoring
 
-## Requirements for 0.0.1
+## Requirements for 0.0.2
 * [x] Ground vehicle dynamics support
 * [ ] Ground vehicle controls
 * [ ] Input handling refactoring

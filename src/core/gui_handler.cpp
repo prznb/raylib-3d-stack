@@ -62,7 +62,7 @@ void gui::Handler::display(Shared &state) {
 
   cursor_y += cursor_y_increment;
   
-  DrawText(TextFormat("Camera Mode: %d", *state.camera_view), cursor_x, cursor_y, TXT_SIZE, DARKBLUE);
+  DrawText(TextFormat("Camera Mode: %d", *state.input_mode), cursor_x, cursor_y, TXT_SIZE, DARKBLUE);
 
 
   // New panel - Vehicle tuning
@@ -185,5 +185,4 @@ void gui::Handler::display(Shared &state) {
   min = "0.0";
   max = "12.0";
   GuiSlider(bounds, min, max, &curr_speed, 0.f, 10.f);
-
 }

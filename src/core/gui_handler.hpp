@@ -9,10 +9,8 @@ class Handler {
   float _bottom_panel_height; 
   float _bottom_panel_item_width = 300;
 
-
 public:
   void process(Shared &state);
   void display(Shared &state);
-
 };
 } // namespace gui

@@ -19,7 +19,7 @@ private:
 
   Camera _camera;
   CameraMode _camera_mode;
-  CameraView _camera_view = CAMERA_LOCK;
+  InputMode _input_mode = CAMERA_LOCK;
 
   float _slin = 0.1f;  // speed linear
   float _sang = 0.05f; // speed angular

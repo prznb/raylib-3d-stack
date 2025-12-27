@@ -49,12 +49,12 @@ class AnalogAxis
 };
 
 
-typedef enum CameraView{
+typedef enum InputMode{
   CAMERA = 0,
   CAMERA_LOCK,
   PLAYER, 
   SHAPER
-}CameraView;
+}InputMode;
 
 typedef struct InputStorage{
   // Axes 
@@ -68,6 +68,7 @@ typedef struct InputStorage{
   bool kbd_c; 
   bool kbd_v; 
   bool kbd_b;
+  bool kbd_space;
 
   float mou_s; 
 
@@ -88,6 +89,7 @@ typedef struct RendererObjectRepresentations
 typedef struct VehicleControls{
   btScalar setpoint_engine_force;
   btScalar setpoint_steering_angle;
+  btScalar setpoint_braking_force;
 }VehicleControls;
 
 typedef struct ExternalFT
