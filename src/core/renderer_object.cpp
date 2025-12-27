@@ -87,22 +87,20 @@ void Vehicle::process(int scene_index, RendererObjectRepresentations &rot) {
 
 void Vehicle::display(Shared &state) 
 {
-  // proper offset: 
-  // Get orientation and proper "down" direction in the chassis body frame. 
-  // Subtract _model_translation_offset from chassis body "down", in chassis frame.
-  // Translate updated position to WS
+  Matrix tmp_physics_rot = MatrixRotateXYZ(_pose.wf_rotation);
+  Vector3 rotated_offset = Vector3Transform(_model_translation_offset, tmp_physics_rot);
 
   // base model
   _pose.wf_rotation = Vector3Add(_pose.wf_rotation, _model_rotation_offset);
   _model.transform = MatrixRotateZYX(_pose.wf_rotation);
-  DrawModelWires(_model, Vector3Add(_pose.wf_translation,_model_translation_offset), 1.0f, BLACK);
-  DrawModel(_model, Vector3Add(_pose.wf_translation,_model_translation_offset), 1.0f, RAYWHITE);
+  DrawModelWires(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, BLACK);
+  DrawModel(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RAYWHITE);
   
   // chassis extras
   for(int i = 0; i<5; ++i)
   {
     _submodels[i].transform = MatrixRotateZYX(_pose.wf_rotation);
-    DrawModelWires(_submodels[i],Vector3Add(_pose.wf_translation,_model_translation_offset), 1.0f, RED);
+    DrawModelWires(_submodels[i],Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RED);
   }
 
   // Wheels
