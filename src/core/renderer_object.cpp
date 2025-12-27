@@ -109,6 +109,7 @@ void Vehicle::display(Shared &state)
   for(model_idx = 8; model_idx<16; model_idx += 2)
   {
     Vector3 rot_zyx = _wheel_transforms[transform_idx].wf_rotation;
+    rot_zyx.x = -rot_zyx.x;
     if(flip)
     {
       rot_zyx = Vector3Add(rot_zyx,{0.f, PI, 0.f});
