@@ -81,11 +81,15 @@ void World::addObject(nlohmann::json &obj_params) {
     colShape = new btCylinderShape(dim);
   }
 
-  else if (obj_params["type"] == "car") {
+  else if (obj_params["type"] == "car") 
+  {
+    const float dim_scale_for_physics_world = 0.8f;
+
     btVector3 dim = {
-        (float)(obj_params["dimensions"]["chassis"]["width"]) / 2.f,
+        dim_scale_for_physics_world*(float)(obj_params["dimensions"]["chassis"]["width"]) / 2.f,
         (float)(obj_params["dimensions"]["chassis"]["height"]) / 2.f,
-        (float)(obj_params["dimensions"]["chassis"]["length"]) / 2.f};
+        dim_scale_for_physics_world*(float)(obj_params["dimensions"]["chassis"]["length"]) / 2.f};
+  
     colShape = new btBoxShape(dim);
   }
 
@@ -163,10 +167,10 @@ void World::vehicleSetup(btRigidBody *body, nlohmann::json &obj_params) {
   btVector3 wheelAxleCSLeft = {-1.f, 0.f, 0}; // left
   btVector3 wheelAxleCSRight = {1.f, 0.f, 0}; // right
 
-  btVector3 connectionPointCS0FL = {-track / 2.f, 0.f, wheelbase / 2.f};
-  btVector3 connectionPointCS0FR = {track / 2.f , 0.f, wheelbase / 2.f};
-  btVector3 connectionPointCS0RL = {-track / 2.f, 0.f, -wheelbase / 2.f};
-  btVector3 connectionPointCS0RR = {track / 2.f , 0.f, -wheelbase / 2.f};
+  btVector3 connectionPointCS0FL = {-track / 2.f, -0.2f, wheelbase / 2.f};
+  btVector3 connectionPointCS0FR = {track / 2.f , -0.2f, wheelbase / 2.f};
+  btVector3 connectionPointCS0RL = {-track / 2.f, -0.2f, -wheelbase / 2.f};
+  btVector3 connectionPointCS0RR = {track / 2.f , -0.2f, -wheelbase / 2.f};
 
   // FL
   vehicle->addWheel(connectionPointCS0FL, wheelDirectionCS0, wheelAxleCSLeft,

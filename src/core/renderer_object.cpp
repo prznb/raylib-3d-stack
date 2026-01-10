@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <memory>
 
+// Extras
+#define IOMGREEN CLITERAL(Color){ 0, 101, 76, 255 }
+
 namespace renderer {
 
 // Object
@@ -86,14 +89,17 @@ void Vehicle::process(int scene_index, RendererObjectRepresentations &rot) {
 
 void Vehicle::display(Shared &state) 
 {
-  Matrix tmp_physics_rot = MatrixRotateXYZ(_pose.wf_rotation);
-  Vector3 rotated_offset = Vector3Transform(_model_translation_offset, tmp_physics_rot);
+  // FIXME!
+  //Matrix tmp_physics_rot = MatrixRotateXYZ(_pose.wf_rotation);
+  //Vector3 rotated_offset = Vector3Transform(_model_translation_offset, tmp_physics_rot);
 
   // base model
+  // TODO: Try to get the offset on the basis of real-wheel axle. Should be much more stable.
+  /*
   _pose.wf_rotation = Vector3Add(_pose.wf_rotation, _model_rotation_offset);
   _model.transform = MatrixRotateZYX(_pose.wf_rotation);
   DrawModelWires(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, BLACK);
-  DrawModel(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RAYWHITE);
+  DrawModel(_model, Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, IOMGREEN);
   
   // chassis extras
   for(int i = 0; i<7; ++i)
@@ -101,6 +107,7 @@ void Vehicle::display(Shared &state)
     _submodels[i].transform = MatrixRotateZYX(_pose.wf_rotation);
     DrawModelWires(_submodels[i],Vector3Add(_pose.wf_translation,rotated_offset), 1.0f, RED);
   }
+  */
 
   // Wheels
   int model_idx; 
